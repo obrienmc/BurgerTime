@@ -1,0 +1,111 @@
+/**
+ * 
+ */
+package burgertime;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+/**
+ * TODO Put here a description of what this class does.
+ *
+ * @author xiaox.
+ *         Created Feb 1, 2014.
+ */
+public class Game implements Temporal {
+	private final int WIDTH=683;
+	private final int HEIGHT=650;
+	private DrawableComponent draw;
+	//private ArrayList<Guard> guardList;
+	@SuppressWarnings("unused")
+	private ActionControl keyHandler;
+	
+	/**
+	 * TODO Put here a description of what this constructor does.
+	 *
+	 */
+	Game(){
+		this.draw = new DrawableComponent();
+	}
+	
+	/**
+	 * TODO Put here a description of what this method does.
+	 *
+	 * @param args
+	 */
+	public void gameFrame(){
+		JPanel actionPanel = new JPanel();
+		this.keyHandler = new ActionControl(actionPanel, this.draw.hero, this.draw.level);
+		JFrame frame=new JFrame();
+		frame.add(actionPanel);
+		frame.setTitle("BurgerTime Game");
+		frame.setSize(WIDTH,HEIGHT);
+		frame.getContentPane().setBackground(Color.BLACK);
+		
+		JButton help=new JButton("Help?");
+		help.setFocusable(false);
+		JPanel helpPanel=new JPanel();
+		help.setPreferredSize(new Dimension(80,30));
+		help.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				JFrame frame = new HelpFrame();
+			}
+			
+		});
+		helpPanel.add(help);
+		frame.add(helpPanel, BorderLayout.SOUTH);
+        frame.getContentPane().add(this.draw);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+	}
+
+	/* (non-Javadoc)
+	 * @see burgertime.Temporal#timePassed()
+	 */
+	@Override
+	public void timePassed() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see burgertime.Temporal#die()
+	 */
+	@Override
+	public void die() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see burgertime.Temporal#setIsPaused(boolean)
+	 */
+	@Override
+	public void setIsPaused(boolean isPaused) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see burgertime.Temporal#getIsPaused()
+	 */
+	@Override
+	public boolean getIsPaused() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+}

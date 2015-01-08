@@ -1,0 +1,51 @@
+Loderunner Cycle 2 report and Cycle 3 plans:
+
+Team # 13         Members: Collin Trowbridge, Xinyu Xiao, Matthew O'Brien
+
+
+CYCLE 2 REPORT:
+
+Which user stories did your team successfully implement and test?
+Draw burger set.
+Collision between guards and hero, hero and pathway, guard and pathway.
+Burgers depress and fall, don't stack yet or fall when hit by another burger.
+Hero dies, lives are displayed below plates.
+Hero can be invincible for 3 seconds (this is our version of pepper sprays).
+
+Which stories were in your plans, but did not get done?  Describe the state of each.
+Algorithmic guard movement. Guards move just randomly for now, cycle 3 will implement smart movement.
+
+
+What research experiments did your team do as you learn about technologies?
+Researched timers
+
+
+Briefly describe the main contributions of each team member during Cycle 2.
+Xinyu worked on the burgers colliding with the hero and falling.
+Matthew and Collin worked on pepper sprays, map layout, collision detection, and graphics.
+
+
+CYCLE 3 PLANS:
+Write 3 more levels. Implement the up and down keys to change levels.
+Level input handling from text files.
+Food falls on guard, guard dies and resets position.
+User runs out of lives, game ends. Begin from level 1 again.
+User stacks all the burgers on the plates, wins level, level goes up.
+Scoring interface implemented.
+
+
+List the user stories that you plan to implement in Cycle 3:
+User stacks burgers on the plates, causing them to win the level.
+User runs out of lives, game over and the game resets.
+User beats all of the levels, final score is displayed.
+
+
+RESEARCH:   
+What information/techniques does your team need to research, and who is assigned to investigate what?
+How to reset the game when the user runs out of lives.
+Burgers falling and colliding with respective burgers to make them fall as well.
+
+
+MISC:
+Describe any other aspects of your plans for cycle 3.
+N/A

@@ -1,0 +1,244 @@
+/**
+ * 
+ */
+package burgertime;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JComponent;
+
+/**
+ * TODO Put here a description of what this class does.
+ * 
+ * @author obrienm. Created Feb 3, 2014.
+ */
+public class DrawableComponent extends JComponent implements Temporal {
+	private static final int FRAMES_PER_SECOND = 30;
+	private static final long REPAINT_INTERVAL_MS = 1000 / FRAMES_PER_SECOND;
+	/**
+	 * need public in order to access in the game and Action Control class
+	 */
+	public Hero hero;
+	private Runnable[] guard;
+	private Burger[] burger;
+	private ArrayList<Rectangle2D> pathList;
+	private ArrayList<Drawable> drawableParts;
+	private ArrayList<Rectangle2D> position;
+	public Level level;
+
+	/**
+	 * TODO Put here a description of what this constructor does.
+	 * 
+	 */
+	public DrawableComponent() {
+		this.pathList = new ArrayList<Rectangle2D>();
+		this.level = new Level();
+		this.level.loadLevel();
+		this.pathList = this.level.getPath();
+		this.pathList.addAll(this.level.getPlates());
+		this.guard = new Guard[4];
+		this.guard[0] = new Guard(new Point2D.Double(55, 30), 20, 40,
+				this.pathList);
+		this.guard[1] = new Guard(new Point2D.Double(265, 140), 20, 40,
+				this.pathList);
+		this.guard[2] = new Guard(new Point2D.Double(460, 250), 20, 40,
+				this.pathList);
+		this.guard[3] = new Guard(new Point2D.Double(460, 30), 20, 40,
+				this.pathList);
+
+		// burger1
+
+		// ArrayList<Rectangle2D> position=new ArrayList<Rectangle2D>();
+		// //this.position=new ArrayList<Rectangle2D>();
+		// position.add(new Rectangle2D.Double(90, 60, 100, 10));
+		// position.add(new Rectangle2D.Double(90, 150, 100, 10));
+		// position.add(new Rectangle2D.Double(90, 250, 100, 10));
+		// position.add(new Rectangle2D.Double(90, 360, 100, 10));
+		// ArrayList<Rectangle2D> bars=new ArrayList<Rectangle2D>();
+		// bars.add(new Rectangle2D.Double(50, 60, 560, 10));
+		// bars.add(new Rectangle2D.Double(50, 150, 175, 10));
+		// bars.add(new Rectangle2D.Double(50, 250, 305, 10));
+		// bars.add(new Rectangle2D.Double(50, 360, 565, 10));
+		// bars.add(new Rectangle2D.Double(80, 450, 115, 5));
+		this.burger = new Burger[1];// will be four
+		this.burger[0] = this.level.getBurger(0);
+
+		this.hero = new Hero(new Point2D.Double(330, 325), 20, 40,
+				this.pathList, this.burger, (Guard[]) this.guard);
+		this.drawableParts = new ArrayList<Drawable>();
+
+		for (int i = 0; i < this.guard.length; i++) {
+			this.drawableParts.add((Guard) this.guard[i]);
+		}
+		this.drawableParts.add(this.hero);
+
+		// Creates a separate "thread of execution" to trigger periodic
+		// repainting of this component.
+		Runnable repainter = new Runnable() {
+			@Override
+			public void run() {
+				// Periodically asks Java to repaint this component
+				try {
+					while (true) {
+						Thread.sleep(REPAINT_INTERVAL_MS);
+						repaint();
+						timePassed();
+					}
+				} catch (InterruptedException exception) {
+					// Stop when interrupted
+				}
+			}
+		};
+		new Thread(repainter).start();
+
+		Thread guardThread1 = new Thread(this.guard[0]);
+		Thread guardThread2 = new Thread(this.guard[1]);
+		Thread guardThread3 = new Thread(this.guard[2]);
+		Thread guardThread4 = new Thread(this.guard[3]);
+
+		guardThread1.start();
+		guardThread2.start();
+		guardThread3.start();
+		guardThread4.start();
+
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2 = (Graphics2D) g;
+		this.pathList = this.level.getPath();
+		this.pathList.addAll(this.level.getPlates());
+
+		for (int sprays = 1; sprays <= this.hero.pepperSprays; sprays++) {
+			g2.setColor(new Color(150, 130, 10, 155));
+			Ellipse2D.Double spray = new Ellipse2D.Double(35 * sprays + 120,
+					505, 30, 30);
+			g2.fill(spray);
+		}
+
+		for (int lives = 1; lives <= this.hero.lives; lives++) {
+			g2.setColor(this.hero.getColor());
+			Rectangle2D.Double life = new Rectangle2D.Double(30 * lives + 10,
+					500, 20, 40);
+			g2.fill(life);
+		}
+
+		for (int i = 0; i < this.pathList.size(); i++) {
+			this.drawPathway(g2, this.pathList.get(i));
+		}
+
+		for (Drawable d : this.drawableParts) {
+			this.drawDrawable(g2, d);
+		}
+
+		for (int i = 0; i < this.burger.length; i++) {
+			for (Burger d : this.burger) {
+				this.drawBurger(g2, d);
+			}
+		}
+
+		if (this.hero.pepperDeployed) {
+			g2.setColor(new Color(150, 130, 10, 155));
+			g2.fill(this.hero.deployPepperSpray());
+		}
+	}
+
+	/**
+	 * This helper method draws the given drawable object on the given graphics
+	 * area.
+	 * 
+	 * @param g2
+	 *            the graphics area on which to draw
+	 * @param d
+	 *            the drawable object
+	 */
+	private void drawDrawable(Graphics2D g2, Drawable d) {
+		g2.setColor(d.getColor());
+		Shape shape = d.getShape();
+		g2.fill(shape);
+	}
+
+	private void drawPathway(Graphics2D g2, Rectangle2D pathSegment) {
+		g2.setColor(Color.DARK_GRAY);
+		g2.fill(pathSegment);
+	}
+
+	private void drawBurger(Graphics2D g2, Burger burger) {
+		Rectangle2D[][] shape = burger.getShape();
+		Color[] color = burger.getColor();
+		for (int i = 0; i < shape.length; i++) {
+			for (int j = 0; j < shape[i].length; j++) {
+				g2.setColor(color[i]);
+				g2.fill(shape[i][j]);
+			}
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see burgertime.Temporal#timePassed()
+	 */
+	@Override
+	public void timePassed() {
+		if (!this.hero.pepperDeployed) {
+			if (this.hero.contactWithGuard(this.hero.getHeroCorners(0, 0))) {
+				this.hero.die();
+			}
+		}
+		if (this.hero.isDead()) {
+			this.resetCharacters();
+			this.hero.heroState = false;
+		}
+
+	}
+
+	public void resetCharacters() {
+		this.hero.resetPosition();
+		// this.burger.resetPositions();
+		for (int i = 0; i < guard.length; i++) {
+			((Guard) this.guard[i]).resetPosition();
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see burgertime.Temporal#die()
+	 */
+	@Override
+	public void die() {
+		// System.out.println("BOOM");
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see burgertime.Temporal#setIsPaused(boolean)
+	 */
+	@Override
+	public void setIsPaused(boolean isPaused) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see burgertime.Temporal#getIsPaused()
+	 */
+	@Override
+	public boolean getIsPaused() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+}

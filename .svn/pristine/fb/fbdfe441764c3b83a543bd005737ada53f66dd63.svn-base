@@ -1,0 +1,127 @@
+/**
+ * 
+ */
+package burgertime;
+
+import java.awt.Color;
+import java.awt.Shape;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.List;
+
+import burgertime.Drawable;
+
+
+/**
+ * TODO Put here a description of what this class does.
+ *
+ * @author obrienm.
+ *         Created Feb 3, 2014.
+ */
+public class Map implements Drawable, Temporal{
+	private static final long UPDATE_INTERVAL_MS = 10;
+	private int width;
+	private int height;
+	private Color color;
+	private Shape background;
+	private boolean isPaused = false;
+	private ArrayList<Rectangle2D> path;
+	private ArrayList<Drawable> movingObjects;
+	public Hero user;
+	
+	public Map(int width, int height, Color color) {
+		this.width = width;
+		this.height = height;
+		this.color = color;
+		this.user = new Hero(new Point2D.Double(300,500), 50, 50);
+		//temporary
+//		this.movingObjects.add();
+		
+		
+
+		// Creates a separate "thread of execution" to inform this world of the
+		// passage of time.
+		Runnable tickTock = new Runnable() {
+			@Override
+			public void run() {
+				try {
+					while (true) {
+						Thread.sleep(UPDATE_INTERVAL_MS);
+						timePassed();
+					}
+				} catch (InterruptedException exception) {
+					// Stop when interrupted
+				}
+			}
+		};
+		new Thread(tickTock).start();
+	}
+
+	//-----FROM DRAWABLE INTERFACE-----//
+	
+	/* (non-Javadoc) 
+	 * @see burgertime.Drawable#getColor()
+	 */
+	@Override
+	public Color getColor() {
+		return Color.CYAN;
+	}
+
+	/* (non-Javadoc)
+	 * @see burgertime.Drawable#getShape()
+	 */
+	@Override
+	public Shape getShape() {
+		
+		return this.path.get(0);
+	}
+
+	//-----FROM TEMPORAL INTERFACE-----//
+
+	
+	/* (non-Javadoc)
+	 * @see burgertime.Temporal#timePassed()
+	 */
+	@Override
+	public void timePassed() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see burgertime.Temporal#die()
+	 */
+	@Override
+	public void die() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see burgertime.Temporal#setIsPaused(boolean)
+	 */
+	@Override
+	public void setIsPaused(boolean isPaused) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see burgertime.Temporal#getIsPaused()
+	 */
+	@Override
+	public boolean getIsPaused() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	/**
+	 * TODO Put here a description of what this method does.
+	 *
+	 * @return
+	 */
+	public synchronized ArrayList<Drawable> getDrawableParts() {
+		return new ArrayList<Drawable>(this.movingObjects);
+	}
+	
+}

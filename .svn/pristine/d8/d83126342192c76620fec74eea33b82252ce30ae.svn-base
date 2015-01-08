@@ -1,0 +1,61 @@
+/**
+ * 
+ */
+package burgertime;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+
+import javax.swing.JLabel;
+
+/**
+ * TODO Put here a description of what this class does.
+ *
+ * @author xiaox.
+ *         Created Feb 17, 2014.
+ */
+public class Score {
+	private JLabel scorelabel;
+	private int score;
+	
+	/**
+	 * TODO Put here a description of what this constructor does.
+	 *
+	 */
+	public Score(){
+		this.scorelabel=new JLabel("  Score  :  0  ");
+		this.scorelabel.setSize(new Dimension(300,50));
+		this.scorelabel.setFont(new Font("Dialog", Font.ITALIC, 20));
+		this.scorelabel.setForeground(Color.red);
+		this.score=0;
+	}
+	
+	/**
+	 * TODO Put here a description of what this method does.
+	 *
+	 * @return
+	 */
+	public JLabel getLabel(){
+		return this.scorelabel;
+	}
+	
+	/**
+	 * TODO Put here a description of what this method does.
+	 *
+	 * @return
+	 */
+	public String getText(){
+		return this.scorelabel.getText();
+	}
+	
+	/**
+	 * TODO Put here a description of what this method does.
+	 *
+	 * @param score
+	 */
+	public void addScore(int score){
+		this.score+=score;
+		this.scorelabel.setText("Score  :  "+this.score+"  ");
+	}
+}

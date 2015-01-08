@@ -1,0 +1,163 @@
+/**
+ * 
+ */
+package burgertime;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+/**
+ * TODO Put here a description of what this class does.
+ *
+ * @author xiaox.
+ *         Created Feb 1, 2014.
+ */
+public class Game implements Temporal {
+	private final int WIDTH=683;
+	private final int HEIGHT=565;
+	private Hero user;
+	//private ArrayList<Guard> guardList;
+	@SuppressWarnings("unused")
+	private ActionControl keyHandler;
+	
+	/**
+	 * TODO Put here a description of what this constructor does.
+	 *
+	 */
+	Game(){
+		this.user = new Hero(new Point2D.Double(100,100), 10, 10);
+		//this.guardList = new ArrayList<Guard>();
+	}
+	
+	/**
+	 * TODO Put here a description of what this method does.
+	 *
+	 * @param args
+	 */
+	public void gameFrame(){
+		JPanel actionPanel = new JPanel();
+		this.keyHandler = new ActionControl(actionPanel, this.user);
+		JFrame frame=new JFrame();
+		frame.add(actionPanel);
+		frame.setTitle("BurgerTime Game");
+		frame.setSize(WIDTH,HEIGHT);
+		frame.getContentPane().setBackground(Color.BLACK);
+		
+		JButton help=new JButton("Help?");
+		JPanel helpPanel=new JPanel();
+		help.setPreferredSize(new Dimension(80,30));
+		help.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				JFrame frame = new HelpFrame();
+			}
+			
+		});
+		helpPanel.add(help);
+		frame.add(helpPanel, BorderLayout.SOUTH);
+        frame.getContentPane().add(new Grid());
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+	}
+
+	/* (non-Javadoc)
+	 * @see burgertime.Temporal#timePassed()
+	 */
+	@Override
+	public void timePassed() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see burgertime.Temporal#die()
+	 */
+	@Override
+	public void die() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see burgertime.Temporal#setIsPaused(boolean)
+	 */
+	@Override
+	public void setIsPaused(boolean isPaused) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see burgertime.Temporal#getIsPaused()
+	 */
+	@Override
+	public boolean getIsPaused() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+}
+
+/**
+ * TODO Put here a description of what this class does.
+ * 
+ * @author obrienm. Created Feb 1, 2014.
+ */
+class Grid extends JComponent {
+	@Override
+	public void paint(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setColor(Color.CYAN);
+
+		Rectangle2D.Double bar1 = new Rectangle2D.Double(50, 20, 560, 50);
+		g2.fill(bar1);
+		Rectangle2D.Double bar2 = new Rectangle2D.Double(50, 110, 175, 50);
+		g2.fill(bar2);
+		Rectangle2D.Double bar3 = new Rectangle2D.Double(50, 320, 565, 50);
+		g2.fill(bar3);
+		Rectangle2D.Double bar4 = new Rectangle2D.Double(50, 210, 305, 50);
+		g2.fill(bar4);
+		Rectangle2D.Double bar5 = new Rectangle2D.Double(195, 140, 290, 50);
+		g2.fill(bar5);
+		Rectangle2D.Double bar6 = new Rectangle2D.Double(325, 80, 290, 50);
+		g2.fill(bar6);
+		Rectangle2D.Double bar7 = new Rectangle2D.Double(475, 220, 140, 50);
+		g2.fill(bar7);
+		
+		Rectangle2D.Double ladder1 = new Rectangle2D.Double(50, 20, 30, 350);
+		g2.fill(ladder1);
+		Rectangle2D.Double ladder2 = new Rectangle2D.Double(195, 20, 30, 170);
+		g2.fill(ladder2);
+		Rectangle2D.Double ladder3 = new Rectangle2D.Double(130, 150, 30, 100);
+		g2.fill(ladder3);
+		Rectangle2D.Double ladder4 = new Rectangle2D.Double(195, 220, 30, 100);
+		g2.fill(ladder4);
+		Rectangle2D.Double ladder5 = new Rectangle2D.Double(260, 20, 30, 170);
+		g2.fill(ladder5);
+		Rectangle2D.Double ladder6 = new Rectangle2D.Double(325, 20, 30, 300);
+		g2.fill(ladder6);
+		Rectangle2D.Double ladder7 = new Rectangle2D.Double(455, 20, 30, 300);
+		g2.fill(ladder7);
+		Rectangle2D.Double ladder8 = new Rectangle2D.Double(585, 20, 30, 100);
+		g2.fill(ladder8);
+		Rectangle2D.Double ladder9 = new Rectangle2D.Double(585, 270, 30, 50);
+		g2.fill(ladder9);
+		Rectangle2D.Double ladder10 = new Rectangle2D.Double(390, 190, 30, 130);
+		g2.fill(ladder10);
+		Rectangle2D.Double ladder11 = new Rectangle2D.Double(530, 130, 30, 90);
+		g2.fill(ladder11);
+
+	}
+}

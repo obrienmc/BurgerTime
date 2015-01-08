@@ -1,0 +1,106 @@
+/**
+ * 
+ */
+package burgertime;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JComponent;
+
+
+/**
+ * TODO Put here a description of what this class does.
+ *
+ * @author obrienm.
+ *         Created Feb 3, 2014.
+ */
+public class DrawableComponent extends JComponent {
+	private static final int FRAMES_PER_SECOND = 30;
+	private static final long REPAINT_INTERVAL_MS = 1000 / FRAMES_PER_SECOND;
+	private Map map;
+	public Hero hero;
+	private Guard[] guard;
+	private ArrayList<Drawable> drawableParts;
+
+	/**
+	 * TODO Put here a description of what this constructor does.
+	 *
+	 * @param map
+	 */
+	public DrawableComponent(Map map){
+		this.map = map;
+		this.guard = new Guard[4];
+		this.guard[0] = new Guard(new Point2D.Double(55, 30), 20, 40);
+		this.guard[1] = new Guard(new Point2D.Double(265,140),20,40);
+		this.guard[2] = new Guard(new Point2D.Double(460,250),20,40);
+		this.guard[3] = new Guard(new Point2D.Double(460,30),20,40);
+
+		this.hero = new Hero(new Point2D.Double(200,50),20,40);
+		this.drawableParts = new ArrayList<Drawable>();
+		
+		for (int i = 0; i < this.guard.length; i++){
+			this.drawableParts.add(this.guard[i]);
+		}
+		this.drawableParts.add(this.hero);
+	
+//	 Creates a separate "thread of execution" to trigger periodic
+//			 repainting of this component.
+			Runnable repainter = new Runnable() {
+				@Override
+				public void run() {
+//					 Periodically asks Java to repaint this component
+					try {
+						while (true) {
+							Thread.sleep(REPAINT_INTERVAL_MS);
+							repaint();
+						}
+					} catch (InterruptedException exception) {
+//						 Stop when interrupted
+					}
+				}
+			};
+			new Thread(repainter).start();
+	}
+
+		@Override
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			Graphics2D g2 = (Graphics2D) g;
+			
+			for(int i = 0; i<this.map.path.size(); i++){
+				drawPathway(g2, this.map.path.get(i));
+			}
+			
+			for (Drawable d : this.drawableParts) {
+				drawDrawable(g2, d);
+			}
+	
+		}
+
+		/**
+		 * This helper method draws the given drawable object on the given graphics
+		 * area.
+		 * 
+		 * @param g2
+		 *            the graphics area on which to draw
+		 * @param d
+		 *            the drawable object
+		 */
+		private void drawDrawable(Graphics2D g2, Drawable d) {
+			g2.setColor(d.getColor());
+			Shape shape = d.getShape();
+			g2.fill(shape);
+		}
+		
+		private void drawPathway(Graphics2D g2, Rectangle2D pathSegment){
+			g2.setColor(this.map.getColor());
+			g2.fill(pathSegment);
+		}
+}

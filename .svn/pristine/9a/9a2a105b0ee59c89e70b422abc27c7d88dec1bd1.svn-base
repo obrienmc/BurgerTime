@@ -1,0 +1,23 @@
+BurgerTime Cycle 1 plans:
+
+Team # 13         Members: Collin Trowbridge, Matthew O'Brien, Xinyu Xiao
+
+USER STORIES:
+
+List the user stories that you plan to implement in cycle 1:
+1. User clicks new game button, opens game interface(DONE)
+2. User presses arrow keys, hero moves (DONE) within bounds until it hits guard or wall
+3. User presses the help button on game screen, opens information description for the game(DONE)
+4. User can partially depress food section without it falling
+5. User walks over food on bottom level, food stacks on plates after falling
+
+RESEARCH:   
+What information/techniques does your team need to research, and who is assigned to investigate what?
+Collin will research keyboard action input. 
+Matthew will research graphics for the design of the map. 
+
+
+
+
+MISC:
+Describe any other aspects of your plans for cycle 1.

@@ -1,0 +1,122 @@
+/**
+ * 
+ */
+package burgertime;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JComponent;
+
+
+/**
+ * TODO Put here a description of what this class does.
+ *
+ * @author obrienm.
+ *         Created Feb 3, 2014.
+ */
+public class DrawableComponent extends JComponent {
+	private static final int FRAMES_PER_SECOND = 30;
+	private static final long REPAINT_INTERVAL_MS = 1000 / FRAMES_PER_SECOND;
+	private Map map;
+
+	/**
+	 * TODO Put here a description of what this constructor does.
+	 *
+	 * @param map
+	 */
+	public DrawableComponent(Map map){
+		this.map = map;
+	
+//	 Creates a separate "thread of execution" to trigger periodic
+//			 repainting of this component.
+			Runnable repainter = new Runnable() {
+				@Override
+				public void run() {
+//					 Periodically asks Java to repaint this component
+					try {
+						while (true) {
+							Thread.sleep(REPAINT_INTERVAL_MS);
+							repaint();
+						}
+					} catch (InterruptedException exception) {
+//						 Stop when interrupted
+					}
+				}
+			};
+			new Thread(repainter).start();
+	}
+
+		@Override
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			Graphics2D g2 = (Graphics2D) g;
+
+			drawDrawable(g2, this.map.user);
+//			ArrayList<Drawable> drawableParts = (this.map).getDrawableParts();
+//			for (Drawable d : drawableParts) {
+//				drawDrawable(g2, d);
+			}
+//		}
+
+		/**
+		 * This helper method draws the given drawable object on the given graphics
+		 * area.
+		 * 
+		 * @param g2
+		 *            the graphics area on which to draw
+		 * @param d
+		 *            the drawable object
+		 */
+		private void drawDrawable(Graphics2D g2, Drawable d) {
+//			g2.setColor(d.getColor());
+//			g2.fill(d.getShape());
+			
+			g2.setColor(Color.ORANGE);
+			Rectangle2D.Double bar1 = new Rectangle2D.Double(50, 20, 560, 50);
+			g2.fill(bar1);
+			Rectangle2D.Double bar2 = new Rectangle2D.Double(50, 110, 175, 50);
+			g2.fill(bar2);
+			Rectangle2D.Double bar3 = new Rectangle2D.Double(50, 320, 565, 50);
+			g2.fill(bar3);
+			Rectangle2D.Double bar4 = new Rectangle2D.Double(50, 210, 305, 50);
+			g2.fill(bar4);
+			Rectangle2D.Double bar5 = new Rectangle2D.Double(195, 140, 290, 50);
+			g2.fill(bar5);
+			Rectangle2D.Double bar6 = new Rectangle2D.Double(325, 80, 290, 50);
+			g2.fill(bar6);
+			Rectangle2D.Double bar7 = new Rectangle2D.Double(475, 220, 140, 50);
+			g2.fill(bar7);
+			
+			Rectangle2D.Double ladder1 = new Rectangle2D.Double(50, 20, 30, 350);
+			g2.fill(ladder1);
+			Rectangle2D.Double ladder2 = new Rectangle2D.Double(195, 20, 30, 170);
+			g2.fill(ladder2);
+			Rectangle2D.Double ladder3 = new Rectangle2D.Double(130, 150, 30, 100);
+			g2.fill(ladder3);
+			Rectangle2D.Double ladder4 = new Rectangle2D.Double(195, 220, 30, 100);
+			g2.fill(ladder4);
+			Rectangle2D.Double ladder5 = new Rectangle2D.Double(260, 20, 30, 170);
+			g2.fill(ladder5);
+			Rectangle2D.Double ladder6 = new Rectangle2D.Double(325, 20, 30, 300);
+			g2.fill(ladder6);
+			Rectangle2D.Double ladder7 = new Rectangle2D.Double(455, 20, 30, 300);
+			g2.fill(ladder7);
+			Rectangle2D.Double ladder8 = new Rectangle2D.Double(585, 20, 30, 100);
+			g2.fill(ladder8);
+			Rectangle2D.Double ladder9 = new Rectangle2D.Double(585, 270, 30, 50);
+			g2.fill(ladder9);
+			Rectangle2D.Double ladder10 = new Rectangle2D.Double(390, 190, 30, 130);
+			g2.fill(ladder10);
+			Rectangle2D.Double ladder11 = new Rectangle2D.Double(530, 130, 30, 90);
+			g2.fill(ladder11);
+			
+			g2.setColor(Color.CYAN);
+			g2.fill(d.getShape());
+		}
+}

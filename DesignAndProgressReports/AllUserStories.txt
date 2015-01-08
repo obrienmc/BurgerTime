@@ -1,0 +1,15 @@
+1. User presses arrow keys, hero moves within bounds until it hits guard or wall. (CYCLE 1)
+2. User presses space bar key, hero sprays pepper in the direction he is facing, hits enemies within certain distance. (MAYBE CYCLE 1)
+3. Guard and hero collide, hero loses a life and guards/hero reset at initial position.
+4. User walks over food, food falls if completely pressed. Guards temporarily die if food falls on them, food falls lower 
+	if top food falls on it.
+5. User can partially depress food section without it falling. (CYCLE 1)
+6. User walks over food on bottom level, food stacks on plates after falling. (CYCLE 1)
+7. User lures guard onto food when it falls, food with guard falls to the bottom level.
+8. User presses the help button on game screen, opens information description for the game. (CYCLE 1)
+9. User stacks all burgers on the plates, game goes up a level and hero gains a life.
+10. User runs out of lives, game ends. Begin from level 1 again and resets lives.
+11. User kills a guard, it respawns after a short death (3 seconds) in a particular position.
+12. User collides with power-up, adds score and pepper.
+13. User beats top 5 high score when game ends, enters initials and saves the score.
+14. User clicks new game button, opens game interface. (CYCLE 1)

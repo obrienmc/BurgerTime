@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="11.5.1">
+  <zoom_level>9</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>270</x>
+      <y>63</y>
+      <w>81</w>
+      <h>27</h>
+    </coordinates>
+    <panel_attributes>Main</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>576</x>
+      <y>513</y>
+      <w>234</w>
+      <h>153</h>
+    </coordinates>
+    <panel_attributes>Burger
+--
+Rectangle2D[][] burger
+int numberDepressed
+boolean isMoving
+int itemsPlated
+boolean isPaused
+--
+void depressSection(Rectangle2D item)
+void fall(Rectangle2D item)
+boolean isPlated(int itemsPlated)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>873</x>
+      <y>171</y>
+      <w>225</w>
+      <h>81</h>
+    </coordinates>
+    <panel_attributes>Guard
+--
+int final SPEED
+boolean isStunned
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>387</x>
+      <y>288</y>
+      <w>207</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>Level
+--
+int currentLevel
+ArrayList&lt;Rectangle2D&gt; path
+Point2D[] food
+--
+void loadLevel(int level)
+void upLevel()
+void downLevel()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>639</x>
+      <y>360</y>
+      <w>180</w>
+      <h>99</h>
+    </coordinates>
+    <panel_attributes>Hero
+--
+int lives
+int pepperSprays
+int final SPEED
+--
+void deployPepper()
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>243</x>
+      <y>432</y>
+      <w>162</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>Score
+--
+int score
+--
+void addScore(int value)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>324</x>
+      <y>513</y>
+      <w>198</w>
+      <h>99</h>
+    </coordinates>
+    <panel_attributes>Map
+--
+ArrayList&lt;Rectangle2D&gt; path
+--
+void drawMapAndOverlay()
+void clearMap()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>252</x>
+      <y>144</y>
+      <w>180</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>Game
+--
+Hero user
+ArrayList&lt;Guard&gt; guards
+--
+void gameFrame()
+void restart()
+void timePassed()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>108</x>
+      <y>45</y>
+      <w>63</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>Starting
+point
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>144</x>
+      <y>45</y>
+      <w>143</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>27;27;126;27</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>261</x>
+      <y>63</y>
+      <w>106</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+constructs</panel_attributes>
+    <additional_attributes>54;81;54;27</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>612</x>
+      <y>117</y>
+      <w>171</w>
+      <h>162</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Abstract&gt;&gt;
+Character
+--
+Point2D final STARTPOINT
+Point2D currentPosition
+Point2D centerPoint
+double radius
+boolean isPaused
+boolean isOnPath
+--
+void timePassed()
+void updatePosition(int x, int y)
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>756</x>
+      <y>171</y>
+      <w>134</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>27;27;117;27</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>702</x>
+      <y>252</y>
+      <w>44</w>
+      <h>125</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>27;27;27;108</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>405</x>
+      <y>153</y>
+      <w>224</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+constructs</panel_attributes>
+    <additional_attributes>207;45;27;45</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>396</x>
+      <y>387</y>
+      <w>106</w>
+      <h>143</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+constructs</panel_attributes>
+    <additional_attributes>27;126;81;27</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>270</x>
+      <y>225</y>
+      <w>106</w>
+      <h>224</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+constructs</panel_attributes>
+    <additional_attributes>54;207;54;27</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>783</x>
+      <y>378</y>
+      <w>98</w>
+      <h>188</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>36;27;81;27;81;171;27;171</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>783</x>
+      <y>225</y>
+      <w>188</w>
+      <h>359</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>27;342;108;342;108;180;171;180;171;27</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>468</x>
+      <y>387</y>
+      <w>197</w>
+      <h>143</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+constructs</panel_attributes>
+    <additional_attributes>180;126;27;27</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>306</x>
+      <y>225</y>
+      <w>197</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.&gt;
+</panel_attributes>
+    <additional_attributes>27;27;180;63</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>45</x>
+      <y>270</y>
+      <w>189</w>
+      <h>135</h>
+    </coordinates>
+    <panel_attributes>ActionControl
+--
+--
+void keyPressed(Key event)
+void keyReleased(Key event)
+void keyTyped(Key event)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>45</x>
+      <y>513</y>
+      <w>189</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+Key Listener
+--
+--
+void keyPressed(Key event)
+void keyReleased(Key event)
+void keyTyped(Key event)
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>108</x>
+      <y>378</y>
+      <w>44</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>27;135;27;27</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>792</x>
+      <y>225</y>
+      <w>134</w>
+      <h>179</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.&gt;
+</panel_attributes>
+    <additional_attributes>27;162;117;162;117;27</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>81</x>
+      <y>135</y>
+      <w>188</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+constructs</panel_attributes>
+    <additional_attributes>54;135;54;45;171;45</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>909</x>
+      <y>432</y>
+      <w>198</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+Temporal
+--
+--
+void timePassed()
+void setIsPaused(boolean isPaused)
+void die()
+boolean isPaused()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>756</x>
+      <y>216</y>
+      <w>269</w>
+      <h>233</h>
+    </coordinates>
+    <panel_attributes>lt=&gt;&gt;.</panel_attributes>
+    <additional_attributes>27;27;81;27;81;117;252;117;252;216</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>783</x>
+      <y>513</y>
+      <w>242</w>
+      <h>116</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>225;27;225;99;27;99</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>333</x>
+      <y>63</y>
+      <w>800</w>
+      <h>386</h>
+    </coordinates>
+    <panel_attributes>lt=&gt;&gt;.</panel_attributes>
+    <additional_attributes>27;81;27;27;783;27;783;351;729;351;729;369</additional_attributes>
+  </element>
+</diagram>

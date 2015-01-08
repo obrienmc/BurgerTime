@@ -1,0 +1,177 @@
+/**
+ * 
+ */
+package burgertime;
+
+import java.awt.Color;
+import java.awt.Shape;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+
+/**
+ * Guard class has one guard and handles all of the moving and collision
+ * detection with the path
+ * 
+ * @author xiaox. trowbrct. obrienm.
+ */
+public class Guard extends AbstractCharacter implements Runnable {
+	private int VELOCITY;
+	private Rectangle2D character;
+	private Rectangle2D currentPathRectangle;
+	private Color guardColor;
+	private DrawableComponent drawComponent;
+	/**
+	 * Takes the start point, width, heighth, and path list for the guard to
+	 * follow
+	 * 
+	 * @param start
+	 * @param characterWidth
+	 * @param characterHeight
+	 * @param pathList
+	 * @param drawableComponent
+	 * */
+	Guard(Point2D start, double characterWidth, double characterHeight,
+			ArrayList<Rectangle2D> pathList, DrawableComponent drawableComponent) {
+		super(start, characterWidth, characterHeight, pathList);
+		this.VELOCITY = 3;
+		this.drawComponent = drawableComponent;
+		this.currentPathRectangle = new Rectangle2D.Double();
+		this.guardColor = Color.RED;
+		this.character = new Rectangle2D.Double(super.currentPosition.getX(),
+				super.currentPosition.getY(), characterWidth, characterHeight);
+	}
+
+	/**
+	 * When the Hero dies, this resets the guard's position
+	 * 
+	 */
+	public void resetPosition() {
+		this.character.setRect(new Rectangle2D.Double(super.STARTPOINT.getX(),
+				super.STARTPOINT.getY(), super.width, super.height));
+		this.currentPosition = new Point2D.Double(super.STARTPOINT.getX(),
+				super.STARTPOINT.getY());
+	}
+
+	// -----FROM DRAWABLE INTERFACE-----//
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see burgertime.AbstractCharacter#updatePosition(int, int)
+	 */
+	@Override
+	public void updatePosition(double x, double y) {
+		for (int i = 0; i < 4; i++){
+			for (int j = 0; j < 4; j++){
+				if (this.character.intersects(this.drawComponent.burger[i].position.get(j)) && this.drawComponent.burger[i].getIsMoving(j)){
+					//this.resetPosition();
+					System.out.println(this.drawComponent.burger[i].position.get(j));
+					
+					System.out.println("he has died.");
+					break;
+				}
+			}
+			
+		}
+		
+		Point2D[] pointList = new Point2D[4];
+		Point2D newPositionTopLeft = new Point2D.Double(
+				this.currentPosition.getX() + (x * this.VELOCITY),
+				this.currentPosition.getY() + (y * this.VELOCITY));
+		Point2D newPositionTopRight = new Point2D.Double(
+				this.currentPosition.getX() + (x * this.VELOCITY) + super.width,
+				this.currentPosition.getY() + (y * this.VELOCITY));
+		Point2D newPositionBottomLeft = new Point2D.Double(
+				this.currentPosition.getX() + (x * this.VELOCITY),
+				this.currentPosition.getY() + (y * this.VELOCITY)
+						+ super.height);
+		Point2D newPositionBottomRight = new Point2D.Double(
+				this.currentPosition.getX() + (x * this.VELOCITY) + super.width,
+				this.currentPosition.getY() + (y * this.VELOCITY)
+						+ super.height);
+		pointList[0] = newPositionTopLeft;
+		pointList[1] = newPositionTopRight;
+		pointList[2] = newPositionBottomLeft;
+		pointList[3] = newPositionBottomRight;
+		if (isOnPath(pointList)) {
+			this.currentPosition = newPositionTopLeft;
+			this.character = new Rectangle2D.Double(
+					super.currentPosition.getX(), super.currentPosition.getY(),
+					super.width, super.height);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see burgertime.Drawable#getColor()
+	 */
+	@Override
+	public Color getColor() {
+		return this.guardColor;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see burgertime.Drawable#getShape()
+	 */
+	@Override
+	public Shape getShape() {
+		return this.character;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see burgertime.AbstractCharacter#isOnPath(java.awt.geom.Point2D[])
+	 */
+	@Override
+	public boolean isOnPath(Point2D[] pointList) {
+		int count = 0;
+		for (int i = 2; i < pointList.length; i++) {
+			for (int j = 0; j < super.pathList.size(); j++) {
+				if (super.pathList.get(j).contains(pointList[i])) {
+					count++;
+					this.currentPathRectangle = super.pathList.get(j);
+					break;
+				}
+			}
+		}
+		if (count == 2) {
+			return true;
+		}
+		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Runnable#run()
+	 */
+	@Override
+	public void run() {
+		try {
+			while (true) {
+				// double xRandom = (Math.random() - 0.5) * 2;
+				// double yRandom = (Math.random() - 0.5) * 2;
+				// double randomNum = Math.random();
+				// if (randomNum > 0.5) {
+				// updatePosition(0, yRandom);
+				// } else {
+				// updatePosition(xRandom, 0);
+				// }
+				// if (this.character.getY() <
+				// this.currentPathRectangle.getMaxY()){
+				// updatePosition(0, 1);
+				// }
+				updatePosition(0, 1);
+				Thread.sleep(200);
+			}
+		} catch (InterruptedException e) {
+			// do nothing here
+		}
+	}
+
+}

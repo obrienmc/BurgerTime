@@ -1,0 +1,105 @@
+/**
+ * 
+ */
+package burgertime;
+import java.awt.geom.Rectangle2D;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+/**
+ * 
+ */
+
+/**
+ * TODO Put here a description of what this class does.
+ *
+ * @author trowbrct.
+ *         Created Feb 2, 2014.
+ */
+public class Level {
+	private int currentLevel;
+	private File inputFile;
+	private int lineNumber;
+	private Scanner in;
+	private ArrayList<Rectangle2D> pathList;
+	private ArrayList<Rectangle2D> burgerList;
+	private Rectangle2D[] guards;
+	Rectangle2D hero;
+	
+	public Level() {
+		this.currentLevel = 1;
+		this.pathList = new ArrayList<Rectangle2D>();
+		this.burgerList = new ArrayList<Rectangle2D>();
+		this.guards = new Rectangle2D[4];
+		this.lineNumber = 0;
+	}
+	
+	public void loadLevel() {
+		this.inputFile = new File("level" + this.currentLevel + ".txt");
+
+		try {
+			this.in = new Scanner(this.inputFile);
+		} catch (FileNotFoundException e) {
+			new RuntimeException("You suck");
+		}
+		
+		while (this.in.hasNextLine()) {
+			
+			if (this.lineNumber < 4) {//this will be 16!
+				this.burgerList.add(extractRectangle());
+				System.out.println(this.burgerList.get(this.lineNumber).toString());
+				
+			} else if (this.lineNumber == 4){// will be 16!
+				this.hero = extractRectangle();
+				System.out.println(this.hero.toString());	
+				
+			} else if (this.lineNumber > 4 && this.lineNumber <= 8){// will be 16 and 20
+				this.guards[this.lineNumber - 5] = extractRectangle();
+				System.out.println("Guard number " + (this.lineNumber - 4) + " " + this.guards[this.lineNumber - 5].toString());
+			}
+			if (this.lineNumber > 8){
+				break;
+			}
+			this.lineNumber++;
+		}
+			this.in.close();
+	}
+	
+	private Rectangle2D.Double extractRectangle(){
+		int i = 0;
+		int j = 0;
+		int k = 0;
+		int l = 0;
+		int x = 0;
+		int y = 0;
+		int width = 0;
+		int height = 0;
+		String line = this.in.nextLine();
+		while (Character.isDigit(line.charAt(i))) {
+			i++;
+		}
+		x = Integer.parseInt(line.substring(0, i));
+
+		j = i + 1;
+		while (Character.isDigit(line.charAt(j))) {
+			j++;
+		}
+		y = Integer.parseInt(line.substring(i + 1, j));
+		
+		k = j + 1;
+		while (Character.isDigit(line.charAt(k))){
+			k++;
+		}
+		width = Integer.parseInt(line.substring(j + 1, k));
+		
+		l = k + 1;
+		while (Character.isDigit(line.charAt(l))){
+			l++;
+		}
+		height = Integer.parseInt(line.substring(k + 1, l));
+		return new Rectangle2D.Double(x, y, width, height);
+	}
+	
+}

@@ -1,0 +1,64 @@
+package burgertime;
+
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import javax.swing.KeyStroke;
+
+/**
+ * 
+ */
+
+/**
+ * TODO Put here a description of what this class does.
+ *
+ * @author trowbrct.
+ *         Created Feb 2, 2014.
+ */
+public class ActionControl implements KeyListener{
+	//private Hero user;
+	
+	ActionControl(){//Hero hero){
+		
+	}
+	/* (non-Javadoc)
+	 * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
+	 */
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		String key = KeyStroke.getKeyStrokeForEvent(arg0).toString();
+		key = key.replace("pressed ", "");
+
+		if (key.equals("RIGHT")){
+			//this.user.updatePosition(1, 0);
+		}
+		if (key.equals("LEFT")){
+			//this.user.updatePosition(-1, 0);
+		}
+		if (key.equals("UP")){
+			//this.user.updatePosition(0, -1);
+		}
+		if (key.equals("DOWN")){
+			//this.user.updatePosition(0, 1);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
+	 */
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see java.awt.event.KeyListener#keyTyped(java.awt.event.KeyEvent)
+	 */
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

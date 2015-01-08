@@ -1,0 +1,29 @@
+Loderunner Cycle 4 report:
+
+Team # 13         Members: Xinyu Xiao, Collin Trowbridge, Matthew O'Brien
+
+
+CYCLE 4 REPORT:
+
+Which user stories did your team successfully implement and test?
+Guard Movement
+Powerup
+Win game screen
+change the image of burgers and characters
+High score list and saving / loading of high scores
+
+
+Which stories were in your plans, but did not get done?  Describe the state of each.
+None
+
+What research experiments did your team do as you learn about technologies?
+Xinyu researched actual image importing for the objects.
+Matthew and Collin read some Pacman articles on their ghost movement.
+
+
+Briefly describe the main contributions of each team member during Cycle 4.
+Xinyu finished the high score list, image drawing
+Matthew did most of the guard movement, Collin did a little.
+Collin added the powerup.
+We all worked on the game over and win game screens.
+

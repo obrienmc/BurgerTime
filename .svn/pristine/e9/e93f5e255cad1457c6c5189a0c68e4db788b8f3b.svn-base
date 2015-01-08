@@ -1,0 +1,68 @@
+/**
+ * 
+ */
+package burgertime;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.geom.Point2D;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+/**
+ * TODO Put here a description of what this class does.
+ *
+ * @author xiaox.
+ *         Created Feb 1, 2014.
+ */
+public class Game {
+	private final int WIDTH=500;
+	private final int HEIGHT=500;
+	private Hero user;
+	//private ArrayList<Guard> guardList;
+	@SuppressWarnings("unused")
+	private ActionControl keyHandler;
+	
+	/**
+	 * TODO Put here a description of what this constructor does.
+	 *
+	 */
+	Game(){
+		this.user = new Hero(new Point2D.Double(100,100), 10, 10);
+		//this.guardList = new ArrayList<Guard>();
+	}
+	
+	/**
+	 * TODO Put here a description of what this method does.
+	 *
+	 * @param args
+	 */
+	public void gameFrame(){
+		JPanel actionPanel = new JPanel();
+		this.keyHandler = new ActionControl(actionPanel, this.user);
+		JFrame frame=new JFrame();
+		frame.add(actionPanel);
+		frame.setTitle("BurgerTime Game");
+		frame.setSize(WIDTH,HEIGHT);
+		
+		JButton help=new JButton("Help?");
+		JPanel helpPanel=new JPanel();
+		help.setPreferredSize(new Dimension(80,30));
+		help.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				JFrame frame = new HelpFrame();
+			}
+			
+		});
+		helpPanel.add(help);
+		frame.add(helpPanel, BorderLayout.EAST);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+	}
+}

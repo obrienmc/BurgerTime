@@ -1,0 +1,33 @@
+/**
+ * 
+ */
+package burgertime;
+
+import java.awt.Color;
+import java.awt.Shape;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * TODO Put here a description of what this class does.
+ *
+ * @author obrienm.
+ *         Created Feb 3, 2014.
+ */
+public interface Drawable {
+	
+	/**
+	 * Returns the fill color that should be drawn to represent this object.
+	 * 
+	 * @return the fill color
+	 */
+	Color getColor();
+
+	/**
+	 * Returns the shape the should be drawn to represent this object.
+	 * 
+	 * @return the shape to draw
+	 */
+	Shape getShape();
+
+}

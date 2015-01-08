@@ -1,0 +1,194 @@
+/**
+ * 
+ */
+package burgertime;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import javax.swing.JLabel;
+
+/**
+ * TODO Put here a description of what this class does.
+ *
+ * @author xiaox.
+ *         Created Feb 17, 2014.
+ */
+public class Score {
+	private JLabel scorelabel;
+	private JLabel highScoreLabel;
+	private int score;
+	private ArrayList<String> highScoreName=new ArrayList<String>();
+	private ArrayList<Integer> highScore=new ArrayList<Integer>();
+	private PrintWriter outputFile;
+	private File inputFile;
+	private Scanner in;
+	private int number_of_score=0;;
+	
+	/**
+	 * TODO Put here a description of what this constructor does.
+	 * @throws FileNotFoundException 
+	 *
+	 */
+	public Score(){
+		this.scorelabel=new JLabel("  your score  :  0  ");
+		this.scorelabel.setSize(new Dimension(300,50));
+		this.scorelabel.setFont(new Font("Dialog", Font.ITALIC, 20));
+		this.scorelabel.setForeground(Color.red);
+		this.score=0;
+		
+		this.inputFile = new File("HighScore.txt");
+		try {
+			this.in = new Scanner(this.inputFile);
+		} catch (FileNotFoundException e) {
+			new RuntimeException("You suck");
+		}
+		while (this.in.hasNextLine()) {
+			String line = this.in.nextLine();
+			int i=0;
+			while (line.charAt(i)!=' '){
+				i++;
+			}
+			this.highScoreName.add(line.substring(0,i));
+			this.highScore.add(Integer.parseInt(line.substring(i+1, line.length())));
+			this.number_of_score++;
+		}
+		this.in.close();
+		
+		if (this.highScore.size()>0){
+			this.highScoreLabel=new JLabel("  Highest Score  :  "+this.highScore.get(0)+"  ");
+		}else{
+			this.highScoreLabel=new JLabel("  Highest Score  :  "+0+"  ");
+		}
+		this.highScoreLabel.setSize(new Dimension(300,50));
+		this.highScoreLabel.setFont(new Font("Dialog", Font.ITALIC, 22));
+		this.highScoreLabel.setForeground(Color.red);
+
+	}
+	
+	/**
+	 * TODO Put here a description of what this method does.
+	 *
+	 * @return
+	 */
+	public JLabel getLabel(){
+		return this.scorelabel;
+	}
+		
+	/**
+	 * TODO Put here a description of what this method does.
+	 *
+	 * @return
+	 */
+	public JLabel getHighScoreLabel(){
+		return this.highScoreLabel;
+	}
+	/**
+	 * TODO Put here a description of what this method does. 
+	 * @return 
+	 */
+	@SuppressWarnings("javadoc")
+	public int getScore(){
+		return this.score;
+	}
+	
+	/**
+	 * TODO Put here a description of what this method does.
+	 *
+	 * @param index
+	 * @return
+	 */
+	@SuppressWarnings("javadoc")
+	public int getRank(){
+		for (int i=0;i<this.highScore.size();i++){
+			if (this.score==this.highScore.get(i)){
+				return i+1;
+			}
+		}
+		return 0;
+	}
+	
+	/**
+	 * TODO Put here a description of what this method does.
+	 *
+	 * @param index
+	 * @return
+	 */
+	public int getHighScore(int index){
+		if (index>=this.highScore.size()){
+			return 0;
+		}
+		return this.highScore.get(index);
+	}
+	
+	/**
+	 * TODO Put here a description of what this method does.
+	 *
+	 * @param index
+	 * @return
+	 */
+	public String getHighScoreName(int index){
+		if (index>=this.highScoreName.size()){
+			return "-";
+		}
+		return this.highScoreName.get(index);
+	}
+	/**
+	 * TODO Put here a description of what this method does.
+	 *
+	 * @param score
+	 */
+	public void addScore(int score){
+		if (this.score+score>0){
+			this.score+=score;
+		}
+		this.scorelabel.setText("  your score  :  "+this.score+"  ");
+	}
+	
+	/**
+	 * TODO Put here a description of what this method does.
+	 *
+	 * @param name
+	 * @param score
+	 */
+	public void recordScore(String name){
+		this.highScoreName.add(name);
+		this.highScore.add(this.score);
+		this.printOut();
+	}
+	
+	/**
+	 * TODO Put here a description of what this method does.
+	 *
+	 */
+	public void printOut(){
+		try {
+			this.outputFile = new PrintWriter("HighScore.txt");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		for (int i=0;i<this.highScore.size();i++){
+			int max=0;
+			int index=0;
+			for (int j=i;j<this.highScore.size();j++){
+				if (this.highScore.get(j)>max){
+					max=this.highScore.get(j);
+					index=j;
+				}
+			}
+			this.highScore.add(i,this.highScore.get(index));
+			this.highScoreName.add(i,this.highScoreName.get(index));
+			this.outputFile.println(this.highScoreName.get(i)+" "+this.highScore.get(i));
+			this.highScore.remove(index+1);
+			this.highScoreName.remove(index+1);
+		}
+		this.outputFile.close();
+		
+	}
+}

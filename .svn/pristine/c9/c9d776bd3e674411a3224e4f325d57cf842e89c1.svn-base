@@ -1,0 +1,71 @@
+/**
+ * 
+ */
+package burgertime;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+/**
+ * 
+ */
+
+/**
+ * TODO Put here a description of what this class does.
+ *
+ * @author trowbrct.
+ *         Created Feb 2, 2014.
+ */
+public class Level {
+	private int currentLevel;
+	private File inputFile;
+	private Scanner in;
+	private ArrayList<Rectangle2D> pathList;
+	private Point2D[] burgerList;
+	
+	public Level() {
+		this.currentLevel = 1;
+		this.pathList = new ArrayList<Rectangle2D>();
+		this.burgerList = new Point2D[2]; //will be 32
+	}
+	
+	public void loadLevel(int level) {
+		this.currentLevel = level;
+		this.inputFile = new File("level" + this.currentLevel + ".txt");
+
+		try {
+			this.in = new Scanner(this.inputFile);
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException("You suck");
+			// System.err.println("File not found. Aborting...");
+			// return;
+		}
+		
+		int lineNumber = 0;
+		while(this.in.hasNextLine()){
+			String line = this.in.nextLine();
+			int i = 0;
+			while (Character.isDigit(line.charAt(i))){
+				i++;
+			}
+			int x = Integer.parseInt(line.substring(0,i));
+			
+			int j = i + 1;
+			while (Character.isDigit(line.charAt(j))){
+				j++;
+			}
+			int y = Integer.parseInt(line.substring(i + 1, j));
+			
+			this.burgerList[lineNumber] = new Point2D.Double(x, y);
+			System.out.println(this.burgerList[lineNumber].toString());
+			i = 0;
+			j = 0;
+			lineNumber++;
+			}
+			in.close();
+	}
+	
+}

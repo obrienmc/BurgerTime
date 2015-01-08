@@ -1,0 +1,437 @@
+/**
+ * 
+ */
+package burgertime;
+
+import java.awt.Color;
+import java.awt.Shape;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Double;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import javax.imageio.ImageIO;
+
+/**
+ * Guard class has one guard and handles all of the moving and collision
+ * detection with the path
+ * 
+ * @author xiaox. trowbrct. obrienm.
+ */
+public class Guard extends AbstractCharacter implements Runnable {
+	private double VELOCITY;
+	public boolean isAlive;
+	private Rectangle2D character;
+	private Rectangle2D currentPathRectangle;
+	private Color guardColor;
+	private DrawableComponent drawComponent;
+	private Point2D[] pointList;
+	private Point2D[] prevPointList;
+	private int xDelta;
+	private int yDelta;
+	private int levelNumber;
+	private boolean stuck;
+
+	/**
+	 * Takes the start point, width, heighth, and path list for the guard to
+	 * follow
+	 * 
+	 * @param start
+	 * @param characterWidth
+	 * @param characterHeight
+	 * @param pathList
+	 * @param drawableComponent
+	 * @param levelNumber
+	 * */
+	Guard(Point2D start, double characterWidth, double characterHeight,
+			ArrayList<Rectangle2D> pathList,
+			DrawableComponent drawableComponent, int levelNumber, Score score) {
+		super(start, characterWidth, characterHeight, pathList, score);
+		this.VELOCITY = 0.65;
+		this.stuck = false;
+		this.drawComponent = drawableComponent;
+		this.currentPathRectangle = new Rectangle2D.Double();
+		this.guardColor = Color.RED;
+		this.character = new Rectangle2D.Double(super.currentPosition.getX(),
+				super.currentPosition.getY(), characterWidth, characterHeight);
+		this.xDelta = 0;
+		this.yDelta = 1;
+		this.levelNumber = levelNumber;
+		this.isAlive = true;
+
+		this.prevPointList = new Point2D[2];
+		this.pointList = new Point2D[2];
+
+		Point2D newPositionBottomLeft = new Point2D.Double(
+				this.currentPosition.getX(), this.currentPosition.getY()
+						+ super.height);
+		Point2D newPositionBottomRight = new Point2D.Double(
+				this.currentPosition.getX() + super.width,
+				this.currentPosition.getY() + super.height);
+
+		this.pointList[0] = newPositionBottomLeft;
+		this.pointList[1] = newPositionBottomRight;
+
+		Point2D prevPositionBottomLeft = new Point2D.Double(
+				this.currentPosition.getX() - (this.xDelta * this.VELOCITY),
+				this.currentPosition.getY() - (this.yDelta * this.VELOCITY)
+						+ super.height);
+		Point2D prevPositionBottomRight = new Point2D.Double(
+				this.currentPosition.getX() - (this.xDelta * this.VELOCITY)
+						+ super.width, this.currentPosition.getY()
+						- (this.yDelta * this.VELOCITY) + super.height);
+
+		this.prevPointList[0] = prevPositionBottomLeft;
+		this.prevPointList[1] = prevPositionBottomRight;
+	}
+
+	/**
+	 * When the Hero dies, this resets the guard's position
+	 * 
+	 */
+	public void resetPosition() {
+		this.isAlive = true;
+		this.character.setRect(new Rectangle2D.Double(super.STARTPOINT.getX(),
+				super.STARTPOINT.getY(), super.width, super.height));
+		this.currentPosition = new Point2D.Double(super.STARTPOINT.getX(),
+				super.STARTPOINT.getY());
+		this.xDelta = 0;
+		this.yDelta = 1;
+	}
+
+	// -----FROM DRAWABLE INTERFACE-----//
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see burgertime.AbstractCharacter#updatePosition(int, int)
+	 */
+	@Override
+	public void updatePosition(double x, double y) {
+		if (this.isAlive == false) {
+			this.character = new Rectangle2D.Double(-100, -100, 0, 0);
+			this.currentPosition = new Point2D.Double(-5, -5);
+		}
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				for (int k = 0; k < 5; k++) {
+					if (this.character
+							.intersects(this.drawComponent.burger[i].burger[j][k])
+							&& this.drawComponent.burger[i].getIsMoving(j)) {
+						this.isAlive = false;
+						this.xDelta = 0;
+						this.yDelta = 1;
+						this.addScore(100);
+						Timer timer = new Timer();
+						timer.schedule(new TimerTask() {
+
+							@Override
+							public void run() {
+								Guard.this.resetPosition();
+							}
+						}, 2500);
+						break;
+					}
+				}
+			}
+		}
+
+		Point2D newPositionTopLeft = new Point2D.Double(
+				this.currentPosition.getX() + (x * this.VELOCITY),
+				this.currentPosition.getY() + (y * this.VELOCITY));
+
+		Point2D newPositionBottomLeft = new Point2D.Double(
+				this.currentPosition.getX() + (x * this.VELOCITY),
+				this.currentPosition.getY() + (y * this.VELOCITY)
+						+ super.height);
+		Point2D newPositionBottomRight = new Point2D.Double(
+				this.currentPosition.getX() + (x * this.VELOCITY) + super.width,
+				this.currentPosition.getY() + (y * this.VELOCITY)
+						+ super.height);
+
+		this.pointList[0] = newPositionBottomLeft;
+		this.pointList[1] = newPositionBottomRight;
+
+		if (this.isOnPath(this.pointList)) {
+			this.currentPosition = newPositionTopLeft;
+			this.character = new Rectangle2D.Double(
+					super.currentPosition.getX(), super.currentPosition.getY(),
+					super.width, super.height);
+
+		}
+	}
+
+	/**
+	 * TODO Put here a description of what this method does.
+	 * 
+	 * @return
+	 * 
+	 */
+	@SuppressWarnings("javadoc")
+	public boolean previousInIntersection() {
+		Point2D prevPositionBottomLeft = new Point2D.Double(
+				this.currentPosition.getX() - (this.xDelta * this.VELOCITY),
+				this.currentPosition.getY() - (this.yDelta * this.VELOCITY)
+						+ super.height);
+		Point2D prevPositionBottomRight = new Point2D.Double(
+				this.currentPosition.getX() - (this.xDelta * this.VELOCITY)
+						+ super.width, this.currentPosition.getY()
+						- (this.yDelta * this.VELOCITY) + super.height);
+
+		this.prevPointList[0] = prevPositionBottomLeft;
+		this.prevPointList[1] = prevPositionBottomRight;
+
+		return this.isAtIntersection(this.prevPointList);
+	}
+
+	/**
+	 * TODO Put here a description of what this method does.
+	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public boolean isOption(int x, int y) {
+		int xBuffer = x;
+		int yBuffer = y;
+		Point2D[] option = new Point2D[2];
+
+		Point2D nextPossiblePositionBottomLeft = new Point2D.Double(
+				this.currentPosition.getX() + (this.xDelta * this.VELOCITY)
+						+ xBuffer, this.currentPosition.getY()
+						+ (this.yDelta * this.VELOCITY) + super.height
+						+ yBuffer);
+		Point2D nextPossiblePositionBottomRight = new Point2D.Double(
+				this.currentPosition.getX() + (this.xDelta * this.VELOCITY)
+						+ super.width + xBuffer, this.currentPosition.getY()
+						+ (this.yDelta * this.VELOCITY) + super.height
+						+ yBuffer);
+
+		option[0] = nextPossiblePositionBottomLeft;
+		option[1] = nextPossiblePositionBottomRight;
+
+		return (this.isOnPath(option));
+	}
+
+	/**
+	 * TODO Put here a description of what this method does.
+	 * 
+	 */
+	public void moveGuard() {
+		Point2D[] bottomCornersCurrent = new Point2D[2];
+		bottomCornersCurrent[0] = new Point2D.Double(
+				this.currentPosition.getX(), this.currentPosition.getY()
+						+ super.height);
+		bottomCornersCurrent[1] = new Point2D.Double(
+				this.currentPosition.getX() + super.width,
+				this.currentPosition.getY() + super.height);
+		
+		int type = 0;
+		int posOrNegX = 0;
+		int posOrNegY = 0;
+
+		if (this.isAtIntersection(bottomCornersCurrent)
+				&& !this.previousInIntersection()) {
+
+			if (this.drawComponent.hero.currentPosition.getX() > this.currentPosition
+					.getX()) {
+				posOrNegX = 1;
+			} else {
+				posOrNegX = -1;
+			}
+			if (this.drawComponent.hero.currentPosition.getY() > this.currentPosition
+					.getY()) {
+				posOrNegY = 1;
+			} else {
+				posOrNegY = -1;
+			}
+
+			double num = Math.random();
+			if (num < 0.5) {
+				if (!this.isOption(15 * posOrNegX, 0)) {
+					if (this.isOption(0, 15 * posOrNegY)) {
+						type = 1;
+					} else {
+						this.xDelta *= -1;
+						this.yDelta *= -1;
+						this.stuck = true;
+					}
+				}
+			} else {
+				type = 1;
+				if (!this.isOption(0, 15 * posOrNegY)) {
+					if (this.isOption(15 * posOrNegX, 0)) {
+						type = 0;
+					} else {
+						this.xDelta *= -1;
+						this.yDelta *= -1;
+						this.stuck = true;
+					}
+				}
+			}
+			if (type == 0 && this.stuck == false) {
+				if (posOrNegX > 0) {
+					this.xDelta = 1;
+					this.yDelta = 0;
+				} else {
+					this.xDelta = -1;
+					this.yDelta = 0;
+				}
+			} else if (type == 1 && this.stuck == false) {
+				if (posOrNegY > 0) {
+					this.xDelta = 0;
+					this.yDelta = 1;
+				} else {
+					this.xDelta = 0;
+					this.yDelta = -1;
+				}
+			}
+		}
+		this.stuck = false;
+		this.updatePosition(this.xDelta, this.yDelta);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see burgertime.Drawable#getColor()
+	 */
+	@Override
+	public Color getColor() {
+		return this.guardColor;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see burgertime.Drawable#getShape()
+	 */
+	@Override
+	public Shape getShape() {
+		return this.character;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see burgertime.AbstractCharacter#isOnPath(java.awt.geom.Point2D[])
+	 */
+	@Override
+	public boolean isOnPath(Point2D[] pointList) {
+		int count = 0;
+		for (int i = 0; i < pointList.length; i++) {
+			for (int j = 0; j < super.pathList.size(); j++) {
+				if (super.pathList.get(j).contains(pointList[i])) {
+					count++;
+					break;
+				}
+			}
+		}
+		if (count == 2) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * TODO Put here a description of what this method does.
+	 * 
+	 * @param pointList
+	 * @return
+	 */
+	public boolean isAtIntersection(Point2D[] pointList) {
+		int count = 0;
+		Rectangle2D firstRect1 = null;
+		Rectangle2D secondRect1 = null;
+		Rectangle2D firstRect2 = null;
+		Rectangle2D secondRect2 = null;
+		for (int i = 0; i < pointList.length; i++) {
+			count = 0;
+			for (int j = 0; j < super.pathList.size(); j++) {
+				if (super.pathList.get(j).contains(pointList[i])
+						&& Math.abs(super.pathList.get(j).getMinY()
+								- pointList[i].getY()) > 4
+						&& Math.abs(super.pathList.get(j).getMinX()
+								- pointList[i].getX()) > 4) {
+					count++;
+					if (count == 1 && i == 0) {
+						firstRect1 = new Rectangle2D.Double();
+						firstRect1 = super.pathList.get(j);
+					} else if (i == 0) {
+						secondRect1 = new Rectangle2D.Double();
+						secondRect1 = super.pathList.get(j);
+						if (firstRect1.equals(secondRect1)) {
+							count--;
+							secondRect1 = new Rectangle2D.Double(-10, -10, 0, 0);
+						}
+					} else if (count == 1 && i == 1) {
+						firstRect2 = new Rectangle2D.Double();
+						firstRect2 = super.pathList.get(j);
+					} else if (i == 1) {
+						secondRect2 = new Rectangle2D.Double();
+						secondRect2 = super.pathList.get(j);
+						if (firstRect2.equals(secondRect2)) {
+							count--;
+							secondRect2 = new Rectangle2D.Double(-1, -1, -1, -1);
+						}
+					}
+				} else if (count == 2) {
+					break;
+				}
+			}
+		}
+		if (firstRect1 == null) {
+			firstRect1 = new Rectangle2D.Double(1000, 100, 10, 10);
+		}
+		if (firstRect2 == null) {
+			firstRect2 = new Rectangle2D.Double(-19, 10, 25, 50);
+		}
+		if (secondRect1 == null) {
+			secondRect1 = new Rectangle2D.Double(-35, -10, 100, 100);
+		}
+		if (secondRect2 == null) {
+			secondRect2 = new Rectangle2D.Double(-100, 1000, 100, 100);
+		}
+		if (firstRect1.equals(firstRect2) && secondRect1.equals(secondRect2)) {
+			return true;
+		}
+		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Runnable#run()
+	 */
+	@Override
+	public void run() {
+		try {
+			while (this.drawComponent.isLevelThreading[this.levelNumber]) {
+				this.moveGuard();
+				Thread.sleep(10);
+			}
+		} catch (InterruptedException e) {
+			// do nothing here
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see burgertime.AbstractCharacter#getImage()
+	 */
+	@Override
+	public BufferedImage getImage() {
+		try {
+			BufferedImage image=ImageIO.read(new File("image/Monster.png"));
+			return image;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+}

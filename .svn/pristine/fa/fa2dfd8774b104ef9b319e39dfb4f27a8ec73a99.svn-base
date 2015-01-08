@@ -1,0 +1,210 @@
+/**
+ * 
+ */
+package burgertime;
+
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+/**
+ * 
+ */
+
+/**
+ * This class loads the level and returns all of the variables into the drawable
+ * component class for proper drawing.
+ * 
+ * @author xiaox. trowbrct. obrienm.
+ */
+public class Level {
+	private int currentLevel;
+	private File inputFile;
+	private int lineNumber;
+	private Scanner in;
+	private ArrayList<Rectangle2D> pathList;
+	private ArrayList<Rectangle2D> plateList;
+	private ArrayList<Rectangle2D> burgerList;
+	private Rectangle2D[] guards;
+	private Rectangle2D hero;
+	private DrawableComponent draw;
+
+	/**
+	 * Instantiates all of the variables.
+	 * 
+	 * @param draw
+	 */
+	public Level(DrawableComponent draw) {
+		this.draw = draw;
+		this.currentLevel = 1;
+		this.hero = new Rectangle2D.Double();
+		this.pathList = new ArrayList<Rectangle2D>();
+		this.burgerList = new ArrayList<Rectangle2D>();
+		this.guards = new Rectangle2D[4];
+		this.lineNumber = 0;
+	}
+
+	/**
+	 * Loads the current level.
+	 * 
+	 */
+	public void loadLevel() {
+		// re-initialize variables
+		this.lineNumber = 0;
+		this.hero = new Rectangle2D.Double();
+		this.pathList = new ArrayList<Rectangle2D>();
+		this.plateList = new ArrayList<Rectangle2D>();
+		this.burgerList = new ArrayList<Rectangle2D>();
+		this.guards = new Rectangle2D[4];
+
+		this.inputFile = new File("level" + this.currentLevel + ".txt");
+
+		try {
+			this.in = new Scanner(this.inputFile);
+		} catch (FileNotFoundException e) {
+			new RuntimeException("You suck");
+		}
+
+		while (this.in.hasNextLine()) {
+
+			if (this.lineNumber < 16) {
+				this.burgerList.add(extractRectangle());
+
+			} else if (this.lineNumber == 16) {
+				this.hero = extractRectangle();
+
+			} else if (this.lineNumber > 16 && this.lineNumber <= 20) {
+				this.guards[this.lineNumber - 17] = extractRectangle();
+			}
+			if (this.lineNumber > 20 && this.lineNumber <= 24) {
+				this.plateList.add(extractRectangle());
+			}
+			if (this.lineNumber > 24 && this.lineNumber <= 54) {
+				this.pathList.add(extractRectangle());
+			}
+			if (this.lineNumber > 54) {
+				break;
+			}
+			this.lineNumber++;
+		}
+		this.in.close();
+	}
+
+	private Rectangle2D.Double extractRectangle() {
+		int i = 0;
+		int j = 0;
+		int k = 0;
+		int l = 0;
+		int x = 0;
+		int y = 0;
+		int width = 0;
+		int height = 0;
+		String line = this.in.nextLine();
+		while (Character.isDigit(line.charAt(i))) {
+			i++;
+		}
+		x = Integer.parseInt(line.substring(0, i));
+
+		j = i + 1;
+		while (Character.isDigit(line.charAt(j))) {
+			j++;
+		}
+		y = Integer.parseInt(line.substring(i + 1, j));
+
+		k = j + 1;
+		while (Character.isDigit(line.charAt(k))) {
+			k++;
+		}
+		width = Integer.parseInt(line.substring(j + 1, k));
+
+		l = k + 1;
+		while (Character.isDigit(line.charAt(l))) {
+			l++;
+		}
+		height = Integer.parseInt(line.substring(k + 1, l));
+		return new Rectangle2D.Double(x, y, width, height);
+	}
+
+	/**
+	 * Increases the level by one and then loads it.
+	 * 
+	 */
+	public void upLevel() {
+		if (this.currentLevel != 4) {
+			this.currentLevel++;
+			this.loadLevel();
+			this.draw.initialize();
+		}
+	}
+
+	/**
+	 * Decreases the level by one and then loads it.
+	 * 
+	 */
+	public void downLevel() {
+		if (this.currentLevel > 1) {
+			this.currentLevel--;
+			this.loadLevel();
+			this.draw.initialize();
+		}
+	}
+
+	/**
+	 * Returns the current path list.
+	 * 
+	 * @return pathList
+	 */
+	public ArrayList<Rectangle2D> getPath() {
+		return this.pathList;
+	}
+
+	/**
+	 * Returns the current plate list.
+	 * 
+	 * @return plateList
+	 */
+	public ArrayList<Rectangle2D> getPlates() {
+		return this.plateList;
+	}
+
+	/**
+	 * Returns the burger object for the given index in the array.
+	 * 
+	 * @param index
+	 * @return burger
+	 */
+	public Burger getBurger(int index) {
+		ArrayList<Rectangle2D> burgerPosition = new ArrayList<Rectangle2D>();
+		ArrayList<Rectangle2D> barPosition = new ArrayList<Rectangle2D>();
+		for (int i = 1 + (4 * index); i <= (index + 1) * 4; i++) {
+			burgerPosition.add(this.burgerList.get(i - 1));
+			barPosition.add(this.pathList.get(i - 1));
+		}
+		barPosition.add(this.plateList.get(index));
+		return new Burger(burgerPosition, barPosition);
+	}
+
+	/**
+	 * Returns the hero as a rectangle.
+	 * 
+	 * @return heroRectangle
+	 */
+	public Rectangle2D getHero() {
+		return this.hero;
+	}
+
+	/**
+	 * Returns the guard object for the given index in the array.
+	 * 
+	 * @param index
+	 * @return guard
+	 */
+	public Guard getGuard(int index) {
+		return new Guard(new Point2D.Double(this.guards[index].getX(),
+				this.guards[index].getY()), this.guards[index].getWidth(),
+				this.guards[index].getHeight(), this.getPath());
+	}
+}

@@ -1,0 +1,51 @@
+/**
+ * 
+ */
+package burgertime;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+/**
+ * TODO Put here a description of what this class does.
+ *
+ * @author xiaox.
+ *         Created Feb 1, 2014.
+ */
+public class Game {
+	public static int WIDTH=500;
+	public static int HEIGHT=500;
+	/**
+	 * TODO Put here a description of what this method does.
+	 *
+	 * @param args
+	 */
+	public void gameFrame(){
+		JFrame frame=new JFrame();
+		frame.setTitle("BurgerTime Game");
+		frame.setSize(WIDTH,HEIGHT);
+		
+		JButton help=new JButton("Help?");
+		JPanel panel=new JPanel();
+		help.setPreferredSize(new Dimension(80,30));
+		help.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				JFrame frame;
+				frame=new HelpFrame();
+			}
+			
+		});
+		panel.add(help);
+		frame.add(panel, BorderLayout.EAST);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+	}
+}

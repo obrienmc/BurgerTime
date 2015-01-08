@@ -1,0 +1,118 @@
+/**
+ * 
+ */
+package burgertime;
+
+import java.awt.Color;
+import java.awt.Shape;
+import java.awt.geom.Point2D;
+import java.awt.geom.Line2D.Double;
+import java.awt.geom.Rectangle2D;
+
+/**
+ * This is the hero class, has all of the characteristics of the user (the
+ * hero).
+ * 
+ * @author trowbrct. Created Feb 2, 2014.
+ */
+public class Hero extends AbstractCharacter {
+	private final int VELOCITY;
+	private Map map;
+	private int lives;
+	private int pepperSprays;
+	private Rectangle2D character;
+	private Color heroColor;
+
+	/**
+	 * Creates the character, initializes velocity.
+	 * 
+	 * @param start
+	 * @param characterWidth
+	 * @param characterHeight
+	 */
+	Hero(Point2D start, double characterWidth, double characterHeight, Map map) {
+		super(start, characterWidth, characterHeight);
+		this.map = map;
+		this.VELOCITY = 3;
+		this.heroColor = Color.GREEN;
+		this.lives = 5; // how many lives do we start with?
+		this.pepperSprays = 5; // how many sprays do we start with?
+		this.character = new Rectangle2D.Double(super.currentPosition.getX(),
+				super.currentPosition.getY(), characterWidth, characterHeight);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see burgertime.AbstractCharacter#updatePosition(int, int)
+	 */
+	@Override
+	public void updatePosition(double x, double y) {
+		// moves the position the given direction from the ActionControl class
+		Point2D[] pointList = new Point2D[4];
+		Point2D newPositionTopLeft = new Point2D.Double(
+				this.currentPosition.getX() + (x * this.VELOCITY),
+				this.currentPosition.getY() + (y * this.VELOCITY));
+		Point2D newPositionTopRight = new Point2D.Double(
+				this.currentPosition.getX() + (x * this.VELOCITY) + super.width,
+				this.currentPosition.getY() + (y * this.VELOCITY));
+		Point2D newPositionBottomLeft = new Point2D.Double(
+				this.currentPosition.getX() + (x * this.VELOCITY),
+				this.currentPosition.getY() + (y * this.VELOCITY)
+						+ super.height);
+		Point2D newPositionBottomRight = new Point2D.Double(
+				this.currentPosition.getX() + (x * this.VELOCITY) + super.width,
+				this.currentPosition.getY() + (y * this.VELOCITY)
+						+ super.height);
+		pointList[0] = newPositionTopLeft;
+		pointList[1] = newPositionTopRight;
+		pointList[2] = newPositionBottomLeft;
+		pointList[3] = newPositionBottomRight;
+		if (isOnPath(pointList)) {
+			this.currentPosition = newPositionTopLeft;
+			this.character = new Rectangle2D.Double(
+					super.currentPosition.getX(), super.currentPosition.getY(),
+					super.width, super.height);
+		}
+		System.out.println("You made it here.");
+	}
+
+	public boolean isOnPath(Point2D[] pointList) {
+		int count = 0;
+		for (int i = 0; i < pointList.length; i++) {
+			for (int j = 0; j < this.map.path.size(); j++) {
+				if (this.map.path.get(j).contains(pointList[i])) {
+					count++;
+					break;
+				}
+			}
+		}
+		if (count == 4) {
+			return true;
+		}
+		return false;
+	}
+
+	// -----FROM DRAWABLE INTERFACE-----//
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see burgertime.Drawable#getColor()
+	 */
+	@Override
+	public Color getColor() {
+		return this.heroColor;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see burgertime.Drawable#getShape()
+	 */
+	@Override
+	public Shape getShape() {
+		return this.character;
+	}
+
+}

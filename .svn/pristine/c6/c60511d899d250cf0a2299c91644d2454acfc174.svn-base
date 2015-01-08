@@ -1,0 +1,52 @@
+Loderunner Cycle 3 report and Cycle 4 plans:
+
+Team # 13         Members: Collin Trowbridge, Xinyu Xiao, Matthew O'Brien
+
+
+CYCLE 3 REPORT:
+
+Which user stories did your team successfully implement and test?
+User stacks burgers on the plates, causing them to win the level.
+User runs out of lives, game over and the game resets.
+Guards can be killed when the falling burgers hit them.
+Users can see the initial score on then screen.
+Users can press U and D keys to up and down levels
+
+Which stories were in your plans, but did not get done?  Describe the state of each.
+User beats all of the levels, final score is displayed.
+
+
+
+What research experiments did your team do as you learn about technologies?
+Researched Swing
+
+
+
+Briefly describe the main contributions of each team member during Cycle 3.
+Xinyu worked on the burgers collision and stacks on the plate and displaying score 
+Matthew and Collin worked on up/down levels, guards killing, reset games and input handling with levels.
+
+CYCLE 4 PLANS:
+Guard movements and powerups
+won game screen
+display the final score and the high score list
+change the image of the player and guards
+
+USER STORIES:
+
+List the user stories that you plan to implement in Cycle 4:
+User collides with power-up, adds score and pepper.
+User beats top 5 high score when game ends, enters initials and saves the score.
+
+
+RESEARCH:   
+What information/techniques does your team need to research, and who is assigned to investigate what?
+how to display the images of guards and player
+how to do the guard movements
+
+
+
+
+
+MISC:
+Describe any other aspects of your plans for cycle 4.

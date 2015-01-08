@@ -1,0 +1,120 @@
+/**
+ * 
+ */
+package burgertime;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
+/**
+ * TODO Put here a description of what this class does.
+ *
+ * @author obrienm, trowbrct, xiaox
+ *         Created Feb 16, 2014.
+ */
+public class GameOver extends JFrame {
+	private Score score;
+	private JTextField nameText;
+	
+	public GameOver(Score score){
+		this.score=score;
+		
+		JPanel panel1 = new JPanel();
+		JLabel gameOver = new JLabel();
+		gameOver.setText("GAME OVER...");
+		gameOver.setFont(new Font("Dialog",Font.BOLD,50));
+		panel1.add(gameOver);
+		this.add(panel1,BorderLayout.NORTH);
+		
+		JPanel panel2=new JPanel();
+		panel2.setLayout(new GridLayout(3, 1));
+		JLabel player_score =new JLabel();
+		player_score.setHorizontalAlignment(SwingConstants.CENTER);
+		player_score.setText("Your score :  "+this.score.getScore());
+		player_score.setFont(new Font("Dialog",Font.ITALIC,20));
+		player_score.setForeground(Color.red);
+		panel2.add(player_score);
+		JLabel input_name =new JLabel();
+		input_name.setText("Input your name:");
+		input_name.setFont(new Font("Dialog",Font.ITALIC,18));
+		panel2.add(input_name);
+		this.nameText=new JTextField();
+		System.out.println(this.nameText.getText());
+		panel2.add(this.nameText);
+		this.add(panel2);
+
+		JPanel panel3 = new JPanel();
+		JButton commitScore = new JButton("Send Score");
+		commitScore.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				GameOver.this.score.recordScore(GameOver.this.nameText.getText());
+				JFrame frame=new JFrame();
+				frame.setSize(200,300);
+				JLabel label=new JLabel();
+				label.setText("Your Rank : "+GameOver.this.score.getRank());
+				label.setFont(new Font("Dialog",Font.ROMAN_BASELINE,24));
+				label.setHorizontalAlignment(SwingConstants.CENTER);
+				frame.add(label,BorderLayout.NORTH);
+				
+				JPanel panel = new JPanel();
+				panel.setLayout(new GridLayout(6, 1));
+				JLabel label1 = new JLabel();
+				JLabel label2 = new JLabel();
+				JLabel label3 = new JLabel();
+				JLabel label4 = new JLabel();
+				JLabel label5 = new JLabel();
+				JLabel label6=new JLabel();
+				label1.setText("High Score List");
+				label1.setSize(30, 35);
+				label1.setFont(new Font("Dialog", Font.BOLD, 20));
+				label1.setHorizontalAlignment(SwingConstants.CENTER);
+				label2.setText("  1.  "+GameOver.this.score.getHighScoreName(0)+"   "+GameOver.this.score.getHighScore(0));
+				label3.setText("  2.  "+GameOver.this.score.getHighScoreName(1)+"   "+GameOver.this.score.getHighScore(1));
+				label4.setText("  3.  "+GameOver.this.score.getHighScoreName(2)+"   "+GameOver.this.score.getHighScore(2));
+				label5.setText("  4.  "+GameOver.this.score.getHighScoreName(3)+"   "+GameOver.this.score.getHighScore(3));
+				label6.setText("  5.  "+GameOver.this.score.getHighScoreName(4)+"   "+GameOver.this.score.getHighScore(4));
+				panel.add(label1);
+				panel.add(label2);
+				panel.add(label3);
+				panel.add(label4);
+				panel.add(label5);
+				panel.add(label6);
+				frame.add(panel);
+			
+				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				frame.setVisible(true);
+			}
+		});
+		JButton playAgain = new JButton("Play Again!");
+		playAgain.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+				Game game = new Game();
+				game.gameFrame();
+			}
+
+		});	
+		panel3.add(playAgain);
+		panel3.add(commitScore);
+		this.add(panel3, BorderLayout.SOUTH);
+		this.pack();
+		this.setVisible(true);
+		
+	}
+}

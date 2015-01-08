@@ -1,0 +1,225 @@
+/**
+ * 
+ */
+package burgertime;
+
+import java.awt.Color;
+import java.awt.Shape;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+
+/**
+ * This is the hero class, has all of the characteristics of the user (the
+ * hero).
+ * 
+ * @author xiaox. trowbrct. obrienm.
+ */
+public class Hero extends AbstractCharacter {
+	private final double VELOCITY;
+	public Burger[] burgers;
+	public int lives;
+	public int pepperSprays;
+	private Rectangle2D character;
+	private Color heroColor;
+	public Guard[] guards;
+	public boolean heroState;
+	public boolean pepperDeployed;
+
+	/**
+	 * Creates the character, initializes velocity.
+	 * 
+	 * @param start
+	 * @param characterWidth
+	 * @param characterHeight
+	 * @param pathList
+	 * @param burger
+	 * @param guards
+	 */
+	Hero(Point2D start, double characterWidth, double characterHeight,
+			ArrayList<Rectangle2D> pathList, Burger[] burger, Guard[] guards, Score score) {
+		super(start, characterWidth, characterHeight, pathList,score);
+		this.VELOCITY = 4;
+		this.burgers = new Burger[4];
+		this.guards = new Guard[4];
+		for (int i = 0; i < 4; i++) {
+			this.burgers[i] = burger[i];
+			this.guards[i] = guards[i];
+		}
+		this.heroColor = Color.GREEN;
+		this.lives = 3;
+		this.pepperSprays = 5;
+		this.character = new Rectangle2D.Double(super.currentPosition.getX(),
+				super.currentPosition.getY(), characterWidth, characterHeight);
+
+		this.heroState = false;
+		this.pepperDeployed = false;
+	}
+
+	/**
+	 * When the hero dies, reset it's position to the start point.
+	 * 
+	 */
+	public void resetPosition() {
+		this.character.setRect(new Rectangle2D.Double(super.STARTPOINT.getX(),
+				super.STARTPOINT.getY(), super.width, super.height));
+		this.currentPosition = new Point2D.Double(super.STARTPOINT.getX(),
+				super.STARTPOINT.getY());
+	}
+
+	/**
+	 * Creates a circle for the pepper spray to appear on the screen. Returns
+	 * the circle.
+	 * 
+	 * @return pepperSpray
+	 */
+	public Ellipse2D.Double deployPepperSpray() {
+		this.pepperDeployed = true;
+		Ellipse2D.Double pepperSpray = new Ellipse2D.Double(
+				this.character.getCenterX() - 30,
+				this.character.getCenterY() - 30, 60, 60);
+		return pepperSpray;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see burgertime.AbstractCharacter#updatePosition(int, int)
+	 */
+	@Override
+	public void updatePosition(double x, double y) {
+		// moves the position the given direction from the ActionControl class
+		Point2D[] pointList = this.getHeroCorners(x, y);
+
+		if (isOnPath(pointList)) {
+			if (this.contactWithGuard(pointList) == false) {
+				this.currentPosition = pointList[0];
+				this.character = new Rectangle2D.Double(
+						super.currentPosition.getX(),
+						super.currentPosition.getY(), super.width, super.height);
+
+				for (int i = 0; i < this.burgers.length; i++) {
+					this.burgers[i].depressSection(pointList[2].getX(),
+							pointList[2].getY());
+					this.burgers[i].depressSection(pointList[3].getX(),
+							pointList[3].getY());
+				}
+
+			} else {
+				this.die();
+				this.addScore(-100);
+			}
+		}
+	}
+
+	/**
+	 * Gets the bottom two points of the hero and returns it to check for
+	 * collision detection.
+	 * 
+	 * @param x
+	 * @param y
+	 * @return heroCorners
+	 */
+	public Point2D[] getHeroCorners(double x, double y) {
+		Point2D[] pointList = new Point2D[4];
+		Point2D newPositionTopLeft = new Point2D.Double(
+				this.currentPosition.getX() + (x * this.VELOCITY),
+				this.currentPosition.getY() + (y * this.VELOCITY));
+		Point2D newPositionTopRight = new Point2D.Double(
+				this.currentPosition.getX() + (x * this.VELOCITY) + super.width,
+				this.currentPosition.getY() + (y * this.VELOCITY));
+		Point2D newPositionBottomLeft = new Point2D.Double(
+				this.currentPosition.getX() + (x * this.VELOCITY),
+				this.currentPosition.getY() + (y * this.VELOCITY)
+						+ super.height);
+		Point2D newPositionBottomRight = new Point2D.Double(
+				this.currentPosition.getX() + (x * this.VELOCITY) + super.width,
+				this.currentPosition.getY() + (y * this.VELOCITY)
+						+ super.height);
+
+		pointList[0] = newPositionTopLeft;
+		pointList[1] = newPositionTopRight;
+		pointList[2] = newPositionBottomLeft;
+		pointList[3] = newPositionBottomRight;
+
+		return pointList;
+	}
+
+	@Override
+	public boolean isOnPath(Point2D[] pointList) {
+		int count = 0;
+		for (int i = 2; i < pointList.length; i++) {
+			for (int j = 0; j < super.pathList.size(); j++) {
+				if (super.pathList.get(j).contains(pointList[i])) {
+					count++;
+					break;
+				}
+			}
+		}
+		if (count == 2) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Checks for contact with the guard.
+	 * 
+	 * @param pointList
+	 * @return isContact
+	 */
+	public boolean contactWithGuard(Point2D[] pointList) {
+		if (this.pepperDeployed) {
+			return false;
+		}
+		for (int i = 0; i < this.guards.length; i++) {
+			for (int j = 0; j < pointList.length; j++) {
+				if (this.guards[i].getShape().contains(pointList[j])) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	// -----FROM DRAWABLE INTERFACE-----//
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see burgertime.Drawable#getColor()
+	 */
+	@Override
+	public Color getColor() {
+		return this.heroColor;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see burgertime.Drawable#getShape()
+	 */
+	@Override
+	public Shape getShape() {
+		return this.character;
+	}
+
+	@Override
+	public void die() {
+		this.heroState = true;
+		this.pepperDeployed = false;
+		this.lives--;
+		this.score.addScore(-100);
+	}
+
+	/**
+	 * Returns whether the hero is dead or alive.
+	 * 
+	 * @return heroState
+	 */
+	public boolean isDead() {
+		return this.heroState;
+	}
+
+}

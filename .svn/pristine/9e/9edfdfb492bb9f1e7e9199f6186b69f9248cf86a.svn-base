@@ -1,0 +1,55 @@
+485 58 80 12 burgeronetop
+485 148 80 12 burgeronetopmiddle
+485 248 80 12 burgeronebottommiddle
+485 358 80 12 burgeronebottom willbesixteenburgerrectangles
+355 58 80 12 burgertwotop
+355 178 80 12 burgertwotopmiddle
+355 248 80 12 burgertwobottommiddle
+355 358 80 12 burgertwobottom
+217 58 80 12 burgerthreetop
+217 118 80 12 burgerthreemiddle
+217 178 80 12 burgerthreebottommiddle
+217 358 80 12 burgerthreebottom
+85 58 80 12 burgerfourtop
+85 118 80 12 burgerfourtopmiddle
+85 258 80 12 burgerfourbottommiddle
+85 358 80 12 burgerfourbottom
+315 325 20 30 herorectangles
+185 45 20 30 guardone
+700 1000 0 0 guardtwo
+700 1000 0 0 guardthree
+590 50 20 30 guardfour
+80 450 100 5 plateone
+210 450 100 5 platetwo
+340 450 105 5 platethree
+475 450 115 5 platefour
+50 60 565 10 burgerone top
+440 150 175 10 burgerone UMID
+310 250 305 10 burgerone LMID
+50 360 565 10 burgerone bot
+50 60 565 10 burgertwo top
+180 180 290 10 burgertwo UMID
+310 250 305 10 burgertwo LMID
+50 360 565 10 burgertwo bot
+50 60 565 10 burgerthree
+50 120 290 10 burgerthree
+180 180 290 10 burgerthree
+50 360 565 10 burgerthree
+50 60 565 10 burgerfour
+50 120 290 10 burgerfour
+50 260 160 10 burgerfour
+50 360 565 10 burgerfour
+440 150 175 10 barthree
+310 250 305 10 barfive
+50 260 160 10 barsix
+585 60 30 310 ladderone
+505 150 30 110 laddertwo
+440 60 30 130 ladderthree
+440 250 30 120 ladderfour
+375 60 30 130 ladderfive
+310 60 30 310 laddersix
+245 180 30 190 ladderseven
+180 60 30 310 laddereight
+105 120 30 150 laddernine
+50 60 30 70 ladderten
+50 260 30 110 laddereleven

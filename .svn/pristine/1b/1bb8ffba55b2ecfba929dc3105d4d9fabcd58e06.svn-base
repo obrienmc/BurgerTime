@@ -1,0 +1,71 @@
+/**
+ * 
+ */
+package burgertime;
+
+import java.awt.geom.Point2D;
+
+/**
+ * This class is abstract for the Hero and Guards
+ * 
+ * @author trowbrct. Created Feb 2, 2014.
+ */
+public abstract class AbstractCharacter implements Temporal, Drawable {
+	protected final Point2D STARTPOINT;
+	protected Point2D currentPosition;
+	protected double width;
+	protected double height;
+	protected boolean isPaused;
+	protected boolean isOnPath;
+
+	/**
+	 * sets the position and size of the character.
+	 * 
+	 * @param start
+	 * @param characterWidth
+	 * @param characterHeight
+	 */
+	AbstractCharacter(Point2D start, double characterWidth,
+			double characterHeight) {
+		this.STARTPOINT = start;
+		this.currentPosition = this.STARTPOINT;
+		this.width = characterWidth;
+		this.height = characterHeight;
+	}
+
+	// -------------------------------------------------------------------------
+	// Temporal interface
+
+	@Override
+	public void timePassed() {
+		this.updatePosition(0, 0);
+	}
+
+	@Override
+	public void die() {
+		// add code to make character die
+	}
+
+	@Override
+	public boolean getIsPaused() {
+		// not yet implemented
+		return false;
+	}
+
+	@Override
+	public void setIsPaused(boolean isPaused) {
+		// not yet implemented
+	}
+
+	/**
+	 * updates the position of the character, moving them up, down, left, or
+	 * right.
+	 * 
+	 * @param x
+	 * @param y
+	 */
+	public abstract void updatePosition(double x, double y);
+
+	public abstract boolean isOnPath(Point2D[] pointList);
+
+}

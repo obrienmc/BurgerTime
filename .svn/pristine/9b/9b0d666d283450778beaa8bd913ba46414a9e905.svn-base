@@ -1,0 +1,61 @@
+/**
+ * 
+ */
+package burgertime;
+
+import java.awt.Color;
+import java.awt.Shape;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+
+/**
+ * TODO Put here a description of what this class does.
+ *
+ * @author trowbrct.
+ *         Created Feb 2, 2014.
+ */
+public class Guard extends AbstractCharacter{
+	final int VELOCITY;
+	private Rectangle2D character;
+	private Color guardColor;
+	/**
+	 * TODO Put here a description of what this constructor does.
+	 *
+	 * @param start
+	 * @param characterWidth
+	 * @param characterHeight
+	 */
+	Guard(Point2D start, double characterWidth, double characterHeight) {
+		super(start, characterWidth, characterHeight);
+		this.VELOCITY = 3;
+		this.guardColor = Color.RED;
+		this.character = new Rectangle2D.Double(super.currentPosition.getX(),super.currentPosition.getY(), characterWidth, characterHeight);
+	}
+
+	//-----FROM DRAWABLE INTERFACE-----//
+	
+	/* (non-Javadoc)
+	 * @see burgertime.AbstractCharacter#updatePosition(int, int)
+	 */
+	@Override
+	public void updatePosition(int x, int y) {
+		//movement of guards. 
+	}
+
+	/* (non-Javadoc)
+	 * @see burgertime.Drawable#getColor()
+	 */
+	@Override
+	public Color getColor() {
+		return this.guardColor;
+	}
+
+	/* (non-Javadoc)
+	 * @see burgertime.Drawable#getShape()
+	 */
+	@Override
+	public Shape getShape() {
+		return this.character;
+	}
+
+}

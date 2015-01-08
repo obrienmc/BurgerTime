@@ -1,0 +1,187 @@
+/**
+ * 
+ */
+package burgertime;
+
+import java.awt.Color;
+import java.awt.Shape;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Line2D.Double;
+import java.awt.geom.Rectangle2D;
+
+import javax.swing.Timer;
+
+/**
+ * This is the hero class, has all of the characteristics of the user (the
+ * hero).
+ * 
+ * @author trowbrct. Created Feb 2, 2014.
+ */
+public class Hero extends AbstractCharacter {
+	private final int VELOCITY;
+	private Map map;
+	private Burger burgers;
+	public int lives;
+	public int pepperSprays;
+	private Rectangle2D character;
+	private Color heroColor;
+	private Guard[] guards;
+	public boolean heroState;
+	public boolean pepperDeployed; 
+
+	/**
+	 * Creates the character, initializes velocity.
+	 * 
+	 * @param start
+	 * @param characterWidth
+	 * @param characterHeight
+	 */
+	Hero(Point2D start, double characterWidth, double characterHeight, Map map, Burger burger, Guard[] guards) {
+		super(start, characterWidth, characterHeight);
+		this.map = map;
+		this.VELOCITY = 3;
+		this.burgers = burger;
+		this.heroColor = Color.GREEN;
+		this.lives = 3; // how many lives do we start with?
+		this.pepperSprays = 5; // how many sprays do we start with?
+		this.character = new Rectangle2D.Double(super.currentPosition.getX(),
+				super.currentPosition.getY(), characterWidth, characterHeight);
+		this.guards = guards;
+		this.heroState = false;
+		this.pepperDeployed = false;
+	}
+
+	public void resetPosition(){
+		this.character.setRect(new Rectangle2D.Double(super.STARTPOINT.getX(), super.STARTPOINT.getY(), super.width, super.height));
+		this.currentPosition = new Point2D.Double(super.STARTPOINT.getX(),super.STARTPOINT.getY());
+	}
+	
+	public Ellipse2D.Double deployPepperSpray(){
+		this.pepperDeployed = true;
+		Ellipse2D.Double pepperSpray = new Ellipse2D.Double(this.character.getCenterX()-30, this.character.getCenterY()-30, 60, 60);
+		return pepperSpray;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see burgertime.AbstractCharacter#updatePosition(int, int)
+	 */
+	@Override
+	public void updatePosition(double x, double y) {
+		// moves the position the given direction from the ActionControl class
+		Point2D[] pointList = this.getHeroCorners(x, y);
+		
+		if (isOnPath(pointList)) {
+			if (this.contactWithGuard(pointList) == false) {
+				this.currentPosition = pointList[0];
+				this.character = new Rectangle2D.Double(
+						super.currentPosition.getX(),
+						super.currentPosition.getY(), super.width, super.height);
+
+				this.burgers.depressSection(pointList[2].getX(),
+						pointList[2].getY());
+				this.burgers.depressSection(pointList[3].getX(),
+						pointList[3].getY());
+				this.burgers.depressSection(pointList[0].getX(),
+						pointList[0].getY());
+				this.burgers.depressSection(pointList[1].getX(),
+						pointList[1].getY());
+			} else{
+				this.die();
+			}
+		}
+	}
+
+	public Point2D[] getHeroCorners(double x, double y){
+		Point2D[] pointList = new Point2D[4];
+		Point2D newPositionTopLeft = new Point2D.Double(
+				this.currentPosition.getX() + (x * this.VELOCITY),
+				this.currentPosition.getY() + (y * this.VELOCITY));
+		Point2D newPositionTopRight = new Point2D.Double(
+				this.currentPosition.getX() + (x * this.VELOCITY) + super.width,
+				this.currentPosition.getY() + (y * this.VELOCITY));
+		Point2D newPositionBottomLeft = new Point2D.Double(
+				this.currentPosition.getX() + (x * this.VELOCITY),
+				this.currentPosition.getY() + (y * this.VELOCITY)
+						+ super.height);
+		Point2D newPositionBottomRight = new Point2D.Double(
+				this.currentPosition.getX() + (x * this.VELOCITY) + super.width,
+				this.currentPosition.getY() + (y * this.VELOCITY)
+						+ super.height);
+		
+		pointList[0] = newPositionTopLeft;
+		pointList[1] = newPositionTopRight;
+		pointList[2] = newPositionBottomLeft;
+		pointList[3] = newPositionBottomRight;
+		
+		return pointList;
+	}
+	
+	public boolean isOnPath(Point2D[] pointList) {
+		int count = 0;
+		for (int i = 2; i < pointList.length; i++) {
+			for (int j = 0; j < this.map.path.size(); j++) {
+				if (this.map.path.get(j).contains(pointList[i])) {
+					count++;
+					break;
+				}
+			}
+		}
+		if (count == 2) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean contactWithGuard(Point2D[] pointList){
+		if(this.pepperDeployed){
+			return false;
+		}
+		for(int i =0; i<this.guards.length; i++){
+			for(int j =0; j<pointList.length; j++){
+				if(this.guards[i].getShape().contains(pointList[j])){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	// -----FROM DRAWABLE INTERFACE-----//
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see burgertime.Drawable#getColor()
+	 */
+	@Override
+	public Color getColor() {
+		return this.heroColor;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see burgertime.Drawable#getShape()
+	 */
+	@Override
+	public Shape getShape() {
+		return this.character;
+	}
+	
+	@Override
+	public void die(){
+		this.heroState = true;
+		this.lives--;
+		if(this.lives==0){
+//			~~~~.gameOver;
+		}
+	}
+	
+	public boolean isDead(){
+		return this.heroState;
+	}
+
+}

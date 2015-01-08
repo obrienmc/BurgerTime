@@ -1,0 +1,150 @@
+/**
+ * 
+ */
+package burgertime;
+
+import java.awt.Color;
+import java.awt.Shape;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.List;
+
+import burgertime.Drawable;
+
+
+/**
+ * TODO Put here a description of what this class does.
+ *
+ * @author obrienm.
+ *         Created Feb 3, 2014.
+ */
+public class Map implements Drawable, Temporal{
+	private static final long UPDATE_INTERVAL_MS = 10;
+	private int width;
+	private int height;
+	private Color color;
+	private Shape background;
+	private boolean isPaused = false;
+	public ArrayList<Rectangle2D> path;
+	private ArrayList<Drawable> movingObjects;
+	
+	public Map(int width, int height, Color color) {
+		this.width = width;
+		this.path = new ArrayList<Rectangle2D>();
+		this.height = height;
+		this.color = color;
+		this.addPathway();
+		
+		
+
+		// Creates a separate "thread of execution" to inform this world of the
+		// passage of time.
+		Runnable tickTock = new Runnable() {
+			@Override
+			public void run() {
+				try {
+					while (true) {
+						Thread.sleep(UPDATE_INTERVAL_MS);
+						timePassed();
+					}
+				} catch (InterruptedException exception) {
+					// Stop when interrupted
+				}
+			}
+		};
+		new Thread(tickTock).start();
+	}
+
+	//-----FROM DRAWABLE INTERFACE-----//
+	
+	/* (non-Javadoc) 
+	 * @see burgertime.Drawable#getColor()
+	 */
+	@Override
+	public Color getColor() {
+		return Color.YELLOW;
+	}
+
+	/* (non-Javadoc)
+	 * @see burgertime.Drawable#getShape()
+	 */
+	@Override
+	public Shape getShape() {
+		return this.path.get(0);
+	}
+
+	//-----FROM TEMPORAL INTERFACE-----//
+
+	
+	/* (non-Javadoc)
+	 * @see burgertime.Temporal#timePassed()
+	 */
+	@Override
+	public void timePassed() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see burgertime.Temporal#die()
+	 */
+	@Override
+	public void die() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see burgertime.Temporal#setIsPaused(boolean)
+	 */
+	@Override
+	public void setIsPaused(boolean isPaused) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see burgertime.Temporal#getIsPaused()
+	 */
+	@Override
+	public boolean getIsPaused() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	/**
+	 * TODO Put here a description of what this method does.
+	 *
+	 * @return
+	 */
+	public synchronized ArrayList<Drawable> getDrawableParts() {
+		return new ArrayList<Drawable>(this.movingObjects);
+	}
+	
+	public void addPathway(){
+		//BARS
+		this.path.add(new Rectangle2D.Double(50, 20, 560, 50));
+		this.path.add(new Rectangle2D.Double(325, 80, 290, 50));
+		this.path.add(new Rectangle2D.Double(50, 110, 175, 50));
+		this.path.add(new Rectangle2D.Double(195, 140, 290, 50));
+		this.path.add(new Rectangle2D.Double(50, 210, 305, 50));
+		this.path.add(new Rectangle2D.Double(475, 220, 140, 50));
+		this.path.add(new Rectangle2D.Double(50, 320, 565, 50));
+
+		
+		//LADDERS
+		this.path.add(new Rectangle2D.Double(50, 20, 30, 350));
+		this.path.add(new Rectangle2D.Double(130, 150, 30, 100));
+		this.path.add(new Rectangle2D.Double(195, 20, 30, 170));
+		this.path.add(new Rectangle2D.Double(195, 220, 30, 100));
+		this.path.add(new Rectangle2D.Double(260, 20, 30, 170));
+		this.path.add(new Rectangle2D.Double(325, 20, 30, 300));
+		this.path.add(new Rectangle2D.Double(390, 190, 30, 130));
+		this.path.add(new Rectangle2D.Double(455, 20, 30, 300));
+		this.path.add(new Rectangle2D.Double(530, 130, 30, 90));
+		this.path.add(new Rectangle2D.Double(585, 20, 30, 100));
+		this.path.add(new Rectangle2D.Double(585, 270, 30, 50));
+		
+	}
+	
+}

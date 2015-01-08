@@ -1,0 +1,51 @@
+Loderunner Cycle 1 report and Cycle 2 plans:
+
+Team #13          Members:Collin Trowbridge, Matthew O'Brien, Xinyu Xiao
+
+
+CYCLE 1 REPORT:
+
+Which user stories did your team successfully implement and test?
+Opens help menu on click
+Hero moves with keyboard input
+Hero can see the pathway
+
+
+Which stories were in your plans, but did not get done?  Describe the state of each.
+burgers display and depress, burger class is almost implemented. Need to draw burgers.
+hero stays within bounds of pathway. Hero and pathway are on screen, just need to implement collision detection.
+
+
+
+What research experiments did your team do as you learn about technologies?
+We learned about keybinding through stack overflow.
+We learned about graphics through CSSE220 BallWorlds project.
+We learned about design, and how it's almost constantly changing.
+
+
+Briefly describe the main contributions of each team member during Cycle 1.
+Matthew hardcoded the map and worked on graphics.
+Collin worked on graphics and keyboard input.
+Xinyu worked on grahpics, frames, and the burger class.
+
+CYCLE 2 PLANS:
+Draw burgers.
+Finish our cycle 1 user stories (collision between hero and burgers, and collision between hero and pathway).
+Guards have limited movement.
+
+USER STORIES:
+
+List the user stories that you plan to implement in Cycle 2:
+Hero collides with burgers / depresses them.
+Hero stays on the pathway.
+Hero collides with guards. (possibly dies)
+
+RESEARCH:   
+What information/techniques does your team need to research, and who is assigned to investigate what?
+Research collision detection with rectangles in java.
+Each team member will investigate and then group discussion on how to implement.
+
+
+
+MISC:
+Describe any other aspects of your plans for cycle 2.

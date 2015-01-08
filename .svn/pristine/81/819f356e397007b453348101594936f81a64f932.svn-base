@@ -1,0 +1,51 @@
+/**
+ * 
+ */
+package burgertime;
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+/**
+ * TODO Put here a description of what this class does.
+ *
+ * @author obrienm, trowbrct, xiaox
+ *         Created Feb 16, 2014.
+ */
+public class GameOver extends JFrame {
+	private final int WIDTH = 175;
+	private final int HEIGHT = 100;
+	
+	public GameOver(){
+		this.setSize(WIDTH, HEIGHT);
+		JPanel panel = new JPanel();
+		JButton playAgain = new JButton("Play Again!");
+		playAgain.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+				Game game = new Game();
+				game.gameFrame();
+			}
+
+		});
+		
+		panel.add(playAgain);
+		this.add(panel, BorderLayout.SOUTH);
+		JPanel panel2 = new JPanel();
+		JLabel gameOver = new JLabel();
+		gameOver.setText("GAME OVER...");
+		gameOver.setSize(400, 200);
+		panel2.add(gameOver);
+		
+		this.add(panel2, BorderLayout.NORTH);
+		this.setVisible(true);
+	}
+}

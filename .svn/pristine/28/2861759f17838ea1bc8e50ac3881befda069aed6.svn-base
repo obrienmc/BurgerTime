@@ -1,0 +1,71 @@
+/**
+ * 
+ */
+package burgertime;
+
+import java.awt.Color;
+import java.awt.Shape;
+import java.awt.geom.Point2D;
+import java.awt.geom.Line2D.Double;
+import java.awt.geom.Rectangle2D;
+
+/**
+ * This is the hero class, has all of the characteristics of the user (the hero).
+ *
+ * @author trowbrct.
+ *         Created Feb 2, 2014.
+ */
+public class Hero extends AbstractCharacter {
+	private final int VELOCITY;
+	private int lives;
+	private int pepperSprays;
+	private Rectangle2D character;
+	private Color heroColor;
+	/**
+	 * Creates the character, initializes velocity.
+	 *
+	 * @param start
+	 * @param characterWidth
+	 * @param characterHeight
+	 */
+	Hero(Point2D start, double characterWidth, double characterHeight) {
+		super(start, characterWidth, characterHeight);
+		this.VELOCITY = 5;
+		this.heroColor = Color.GREEN;
+		this.lives = 5; //how many lives do we start with?
+		this.pepperSprays = 5; //how many sprays do we start with?
+		this.character = new Rectangle2D.Double(super.currentPosition.getX(),super.currentPosition.getY(), characterWidth, characterHeight);
+	}
+	/* (non-Javadoc)
+	 * @see burgertime.AbstractCharacter#updatePosition(int, int)
+	 */
+	@Override
+	public void updatePosition(int x, int y) {
+		// moves the position the given direction from the ActionControl class
+		Point2D newPosition = new Point2D.Double(this.currentPosition.getX() + (x*this.VELOCITY), this.currentPosition.getY() + (y*this.VELOCITY));
+		this.currentPosition = newPosition;
+		this.character = new Rectangle2D.Double(super.currentPosition.getX(),super.currentPosition.getY(), super.width, super.height);
+
+		System.out.println("You made it here.");
+	}
+	
+	//-----FROM DRAWABLE INTERFACE-----//
+	
+	/* (non-Javadoc)
+	 * @see burgertime.Drawable#getColor()
+	 */
+	@Override
+	public Color getColor() {
+		return this.heroColor;
+	}
+	/* (non-Javadoc)
+	 * @see burgertime.Drawable#getShape()
+	 */
+	@Override
+	public Shape getShape() {
+		return this.character;
+	}
+	
+	
+
+}

@@ -1,0 +1,70 @@
+/**
+ * 
+ */
+package burgertime;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+/**
+ * Game class opens the game frame, adds the drawable component, action control,
+ * and help menu to the frame.
+ * 
+ * @author xiaox. trowbrct. obrienm. Created Feb 1, 2014.
+ */
+public class Game {
+	private final int WIDTH = 683;
+	private final int HEIGHT = 650;
+	private DrawableComponent draw;
+	@SuppressWarnings("unused")
+	private ActionControl keyHandler;
+
+	/**
+	 * Creates an instance of the Drawable Component
+	 * 
+	 */
+	public Game() {
+		this.draw = new DrawableComponent();
+	}
+
+	/**
+	 * Creates the game frame, adds component, help button, and action control
+	 * for keyboard handling
+	 * 
+	 */
+	public void gameFrame() {
+		JPanel actionPanel = new JPanel();
+		this.keyHandler = new ActionControl(actionPanel, this.draw);
+		JFrame frame = new JFrame();
+		frame.add(actionPanel);
+		frame.setTitle("BurgerTime Game");
+		frame.setSize(this.WIDTH, this.HEIGHT);
+		frame.getContentPane().setBackground(Color.BLACK);
+
+		JButton help = new JButton("Help?");
+		help.setFocusable(false);
+		JPanel helpPanel = new JPanel();
+		help.setPreferredSize(new Dimension(80, 30));
+		help.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				@SuppressWarnings("unused")
+				JFrame helpFrame = new HelpFrame();
+			}
+
+		});
+		helpPanel.add(help);
+		frame.add(helpPanel, BorderLayout.SOUTH);
+		frame.getContentPane().add(this.draw);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+	}
+}

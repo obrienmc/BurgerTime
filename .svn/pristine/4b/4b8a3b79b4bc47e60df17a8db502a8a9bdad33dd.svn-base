@@ -1,0 +1,148 @@
+package burgertime;
+
+import java.awt.event.ActionEvent;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.KeyStroke;
+
+/**
+ * 
+ */
+
+/**
+ * This class handles the keyboard input for the BurgerTime game
+ * 
+ * @author trowbrct. Created Feb 2, 2014.
+ */
+public class ActionControl {
+	private JPanel panel;
+
+	/**
+	 * binds all of the keys to handle input
+	 * 
+	 * @param panel
+	 * @param hero
+	 */
+	public ActionControl(JPanel panel, Hero hero) {
+		this.panel = panel;
+		this.bindKeys(hero);
+
+	}
+
+	/**
+	 * binds the keys and their actions
+	 * 
+	 * @param hero
+	 */
+	public void bindKeys(Hero hero) {
+		// must be final for inner class usage
+		final Hero user = hero;
+
+		// right arrow key
+		this.panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke("RIGHT"), "right");
+		this.panel.getActionMap().put("right", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				user.updatePosition(1, 0);
+			}
+
+		});
+
+		// left arrow key
+		this.panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke("LEFT"), "left");
+		this.panel.getActionMap().put("left", new AbstractAction() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				user.updatePosition(-1, 0);
+			}
+
+		});
+
+		// up key
+		this.panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke("UP"), "up");
+		this.panel.getActionMap().put("up", new AbstractAction() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				user.updatePosition(0, -1);
+			}
+
+		});
+
+		// down key
+		this.panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke("DOWN"), "down");
+		this.panel.getActionMap().put("down", new AbstractAction() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				user.updatePosition(0, 1);
+			}
+
+		});
+
+		// p key
+		this.panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke("P"), "pause");
+		this.panel.getActionMap().put("pause", new AbstractAction() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("pause or resume");
+			}
+
+		});
+
+		// u key
+		this.panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke("U"), "upLevel");
+		this.panel.getActionMap().put("upLevel", new AbstractAction() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("go up a level");
+			}
+
+		});
+
+		// d key
+		this.panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke("D"), "downLevel");
+		this.panel.getActionMap().put("downLevel", new AbstractAction() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("go down a level");
+			}
+
+		});
+		
+		// space bar
+		this.panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke("SPACE"), "spray pepper");
+		this.panel.getActionMap().put("spray pepper", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				user.pepperDeployed = true;
+				user.pepperSprays--;
+				Timer timer = new Timer();
+				timer.schedule(new TimerTask() {
+					  @Override
+					  public void run() {
+							user.pepperDeployed=false;
+					  }
+					}, 2500);
+				
+			}
+		});
+	}
+
+}
